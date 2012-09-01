@@ -79,12 +79,24 @@ body {
 		margin: 20px 30px;
 }
 
-#content .tweet_textarea {
+#content #tweet_textarea {
 		width: 640px;
 		height: 100px;
-		display: none;
 }
 
 #content .show_tweet_textarea {
 		
+}
+
+.hidden {
+		display: none;
+}
+
+.visible {
+		display: block;
+}
+
+.tweetie {
+		border: 1px solid #c0c0c0;
+		display: block;
 }

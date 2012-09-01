@@ -8,9 +8,47 @@
 <script type="text/javascript" src="jscript/jquery-1.8.1.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-	$("tweetie").click(function() {
-	alert("Hellow World");
-	});
+	// Show how many characters the user have left to write and update the input-area
+	var chars = 140;
+	$("#total_chars").val("Characters left: " + chars);
+
+	// Create an empty array for the tweets
+	var tweet_array = [];  
+
+	// Whenever a key is pressed it will subtract from the total characters used
+	// If backspace is pressed it will add to the total characters
+	$("#tweet_textarea").keydown(function(e) {
+	chars = 140 - $(this).val().length;
+
+	if (e.keyCode == 8 || e.keyCode == 46) {
+	if (chars < 140) {
+	chars++;
+	}
+	}
+	else if (chars < 1) {
+	chars = 0;
+	}
+	else {
+	chars--;
+	}
+
+	$("#total_chars").val("Characters left: " + chars);
+	})
+
+  // Add all the tweets to an array
+	$("#tweet_form").submit(function(e) {
+  tweet_array.push($("#tweet_textarea").val());
+
+
+	return false;
+	})
+
+  var arrayLength = tweet_array.length;
+  $.each(tweet_array, function(i, value) {
+									alert("asd");
+  $("#tweets").html("<div class=\"tweetie\">" + val + "</div>");
+  })
+
 	});
 </script>
 </head>
@@ -29,10 +67,13 @@
 	</div>
 
 	<div id="content">
-		<div class="show_tweet_textarea">Skriv ett tweet</div>
-		<form method="post" action="#">
-			<textarea class="tweet_textarea" placeholder="Tweeta ditt tweet"></textarea>
+		<form method="post" action="#" id="tweet_form">
+			<textarea id="tweet_textarea" placeholder="Tweeta ditt tweet" maxlength="140"></textarea>
+			<input type="submit" id="tweet_submit" value="Tweet" />
+			<input type="text" id="total_chars" readonly />
 		</form>
+
+		<p id="tweets"></p>
 	</div>
 </div>
 </body>
