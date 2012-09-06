@@ -100,3 +100,22 @@ body {
 		border: 1px solid #c0c0c0;
 		display: block;
 }
+
+#content #tweets {
+		margin-top: 1em;
+}
+
+#tweets .tweets_msg {
+		border: 1px solid #000000;
+		padding: 3px;
+		margin: 5px 0px;
+}
+
+#content #error_msg {
+		background-color: #f0f0f0;
+		border: 2px solid #c0c0c0;
+		border-radius: 25px;
+
+		margin: 5px;
+		text-align: center;
+}

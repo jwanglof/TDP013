@@ -8,47 +8,58 @@
 <script type="text/javascript" src="jscript/jquery-1.8.1.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
-	// Show how many characters the user have left to write and update the input-area
-	var chars = 140;
-	$("#total_chars").val("Characters left: " + chars);
+		// Show how many characters the user have left to write and update the input-area
+		var chars = 140;
+		$("#total_chars").val("Characters left: " + chars);
+	
+	  $("#error_msg").hide();
 
-	// Create an empty array for the tweets
-	var tweet_array = [];  
+		// Whenever a key is pressed it will subtract from the total characters used
+		// If backspace is pressed it will add to the total characters
+		$("#tweet_textarea").keydown(function(e) {
+			chars = 140 - $(this).val().length;
 
-	// Whenever a key is pressed it will subtract from the total characters used
-	// If backspace is pressed it will add to the total characters
-	$("#tweet_textarea").keydown(function(e) {
-	chars = 140 - $(this).val().length;
+			if (e.keyCode == 8 || e.keyCode == 46) {
+				if (chars < 140) {
+					chars++;
+				}
+			}
+			else if (chars < 1) {
+				chars = 0;
+			}
+			else {
+				chars--;
+			}
+		
+			$("#total_chars").val("Characters left: " + chars);
+		
+		});
+	
+		$("#tweet_form").submit(function() {
 
-	if (e.keyCode == 8 || e.keyCode == 46) {
-	if (chars < 140) {
-	chars++;
-	}
-	}
-	else if (chars < 1) {
-	chars = 0;
-	}
-	else {
-	chars--;
-	}
+			// Check to see that the strint isn't empty!
+			if ($("#tweet_textarea").val()) {
+				$("#tweets").prepend("<div class=\"tweets_msg\">" + $("#tweet_textarea").val() + "<input type=\"checkbox\" name=\"blas\"/></div>");
 
-	$("#total_chars").val("Characters left: " + chars);
-	})
+				// Resets the textarea
+				$("#tweet_textarea").val("");
+		
+				var chars = 140;
+				$("#total_chars").val("Characters left: " + chars);
+			}
+											 else if ($("#tweet_textarea").val().length > 140) {
+										$("#error_msg").text("You have exceeded 140 characters in your message. Please remove some and post again.");
+										$("#error_msg").show("slow");
+										}
+			else {
+											 $("#error_msg").text("You need to write something in the textarea below.");
+											 $("#error_msg").show("slow");
 
-  // Add all the tweets to an array
-	$("#tweet_form").submit(function(e) {
-  tweet_array.push($("#tweet_textarea").val());
+			}
+				return false;
+		});
 
-
-	return false;
-	})
-
-  var arrayLength = tweet_array.length;
-  $.each(tweet_array, function(i, value) {
-									alert("asd");
-  $("#tweets").html("<div class=\"tweetie\">" + val + "</div>");
-  })
-
+										if $("input[name=blas]").is(":checked") { alert("asd"); }
 	});
 </script>
 </head>
@@ -67,14 +78,18 @@
 	</div>
 
 	<div id="content">
+		<div id="error_msg"></div>
+
 		<form method="post" action="#" id="tweet_form">
 			<textarea id="tweet_textarea" placeholder="Tweeta ditt tweet" maxlength="140"></textarea>
 			<input type="submit" id="tweet_submit" value="Tweet" />
 			<input type="text" id="total_chars" readonly />
 		</form>
+		
+		<div id="tweets"></div>
 
-		<p id="tweets"></p>
 	</div>
+
 </div>
 </body>
 </html>
