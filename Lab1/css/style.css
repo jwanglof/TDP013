@@ -29,7 +29,7 @@ body {
 		border-radius: 0px 0px 25px 25px;
 
 		width: 100%;
-		height: 100px;
+		height: 60px;
 		text-align: center;
 }
 
@@ -41,40 +41,6 @@ body {
 		padding-top: 10px;
 }
 
-#topbox #button_container {
-		position: relative; top: 12px; left: 0px;
-
-		width: 100%;
-		height: 29px;
-
-		text-align: center;
-
-		font-family: "Permanent Marker", cursive;
-		font-size: 1.4em;
-}
-
-#button_container .button_left {
-		border-top: 1px solid #c0c0c0;
-		border-right: 1px solid #c0c0c0;
-		border-radius: 0px 10px 0px 0px;
-
-		float: left;
-
-		width: 200px;
-		height: 100%;		
-}
- 
-#button_container .button_right {
-		border-top: 1px solid #c0c0c0;
-		border-left: 1px solid #c0c0c0;		
-		border-radius: 10px 0px 0px 0px;
-
-		float: right;
-
-		width: 200px;
-		height: 100%;
-}
-
 #container #content {
 		margin: 20px 30px;
 }
@@ -82,6 +48,14 @@ body {
 #content #tweet_textarea {
 		width: 640px;
 		height: 100px;
+}
+
+#content #tweet_submit {
+		float: left;
+}
+
+#content #total_chars {
+		float: right;
 }
 
 #content .show_tweet_textarea {
@@ -102,13 +76,15 @@ body {
 }
 
 #content #tweets {
-		margin-top: 1em;
+		clear: both;
+		margin-top: 2em;
 }
 
 #tweets .tweets_msg {
 		border: 1px solid #000000;
 		padding: 3px;
 		margin: 5px 0px;
+		width: 100%;
 }
 
 #content #error_msg {
