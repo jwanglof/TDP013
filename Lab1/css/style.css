@@ -58,10 +58,6 @@ body {
 		float: right;
 }
 
-#content .show_tweet_textarea {
-		
-}
-
 .hidden {
 		display: none;
 }
@@ -80,7 +76,7 @@ body {
 		margin-top: 2em;
 }
 
-#tweets .tweets_msg {
+#tweets .tweet_msgs {
 		border: 1px solid #000000;
 		padding: 3px;
 		margin: 5px 0px;
