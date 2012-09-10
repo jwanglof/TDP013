@@ -1,0 +1,151 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'install', '-g', 'mocha' ]
+2 info using npm@1.1.59
+3 info using node@v0.8.8
+4 verbose read json /usr/lib/package.json
+5 verbose read json /usr/lib/package.json
+6 verbose cache add [ 'mocha', null ]
+7 silly cache add name=undefined spec="mocha" args=["mocha",null]
+8 verbose parsed url { pathname: 'mocha', path: 'mocha', href: 'mocha' }
+9 silly lockFile a619da43-mocha mocha
+10 verbose lock mocha /home/johan/.npm/a619da43-mocha.lock
+11 silly lockFile a619da43-mocha mocha
+12 verbose addNamed [ 'mocha', '' ]
+13 verbose addNamed [ null, '' ]
+14 silly lockFile b9899f31-mocha mocha@
+15 verbose lock mocha@ /home/johan/.npm/b9899f31-mocha.lock
+16 silly addNameRange { name: 'mocha', range: '', hasData: false }
+17 verbose url raw mocha
+18 verbose url resolving [ 'https://registry.npmjs.org/', './mocha' ]
+19 verbose url resolved https://registry.npmjs.org/mocha
+20 info retry registry request attempt 1 at 15:04:40
+21 http GET https://registry.npmjs.org/mocha
+22 http 200 https://registry.npmjs.org/mocha
+23 silly registry.get cb [ 200,
+23 silly registry.get   { vary: 'Accept',
+23 silly registry.get     server: 'CouchDB/1.2.0 (Erlang OTP/R15B)',
+23 silly registry.get     etag: '"786AO3FNQEVM1P3LFNRC6VIM5"',
+23 silly registry.get     date: 'Mon, 10 Sep 2012 11:04:23 GMT',
+23 silly registry.get     'content-type': 'application/json',
+23 silly registry.get     'content-length': '59682' } ]
+24 silly addNameRange number 2 { name: 'mocha', range: '', hasData: true }
+25 silly addNameRange versions [ 'mocha',
+25 silly addNameRange   [ '0.0.1-alpha1',
+25 silly addNameRange     '0.0.1-alpha2',
+25 silly addNameRange     '0.0.1-alpha3',
+25 silly addNameRange     '0.0.1-alpha4',
+25 silly addNameRange     '0.0.1-alpha5',
+25 silly addNameRange     '0.0.1-alpha6',
+25 silly addNameRange     '0.0.1',
+25 silly addNameRange     '0.0.2',
+25 silly addNameRange     '0.0.3',
+25 silly addNameRange     '0.0.4',
+25 silly addNameRange     '0.0.5',
+25 silly addNameRange     '0.0.6',
+25 silly addNameRange     '0.0.7',
+25 silly addNameRange     '0.0.8',
+25 silly addNameRange     '0.1.0',
+25 silly addNameRange     '0.2.0',
+25 silly addNameRange     '0.3.0',
+25 silly addNameRange     '0.3.1',
+25 silly addNameRange     '0.3.2',
+25 silly addNameRange     '0.3.3',
+25 silly addNameRange     '0.3.4',
+25 silly addNameRange     '0.3.6',
+25 silly addNameRange     '0.4.0',
+25 silly addNameRange     '0.5.0',
+25 silly addNameRange     '0.6.0',
+25 silly addNameRange     '0.7.0',
+25 silly addNameRange     '0.7.1',
+25 silly addNameRange     '0.8.0',
+25 silly addNameRange     '0.8.1',
+25 silly addNameRange     '0.9.0',
+25 silly addNameRange     '0.10.0',
+25 silly addNameRange     '0.10.1',
+25 silly addNameRange     '0.10.2',
+25 silly addNameRange     '0.11.0',
+25 silly addNameRange     '0.12.0',
+25 silly addNameRange     '0.12.1',
+25 silly addNameRange     '0.13.0',
+25 silly addNameRange     '0.14.0',
+25 silly addNameRange     '0.14.1',
+25 silly addNameRange     '1.0.0',
+25 silly addNameRange     '1.0.1',
+25 silly addNameRange     '1.0.2',
+25 silly addNameRange     '1.0.3',
+25 silly addNameRange     '1.1.0',
+25 silly addNameRange     '1.2.0',
+25 silly addNameRange     '1.2.1',
+25 silly addNameRange     '1.2.2',
+25 silly addNameRange     '1.3.0',
+25 silly addNameRange     '1.3.1',
+25 silly addNameRange     '1.3.2',
+25 silly addNameRange     '1.4.0',
+25 silly addNameRange     '1.4.1',
+25 silly addNameRange     '1.4.2' ] ]
+26 verbose addNamed [ 'mocha', '1.4.2' ]
+27 verbose addNamed [ '1.4.2', '1.4.2' ]
+28 silly lockFile cd221700-mocha-1-4-2 mocha@1.4.2
+29 verbose lock mocha@1.4.2 /home/johan/.npm/cd221700-mocha-1-4-2.lock
+30 verbose read json /home/johan/.npm/mocha/1.4.2/package/package.json
+31 silly lockFile cd221700-mocha-1-4-2 mocha@1.4.2
+32 silly lockFile b9899f31-mocha mocha@
+33 silly resolved [ { name: 'mocha',
+33 silly resolved     version: '1.4.2',
+33 silly resolved     description: 'simple, flexible, fun test framework',
+33 silly resolved     keywords: [ 'test', 'bdd', 'tdd', 'tap' ],
+33 silly resolved     author: { name: 'TJ Holowaychuk', email: 'tj@vision-media.ca' },
+33 silly resolved     repository: { type: 'git', url: 'git://github.com/visionmedia/mocha.git' },
+33 silly resolved     main: './index',
+33 silly resolved     bin: { mocha: './bin/mocha', _mocha: './bin/_mocha' },
+33 silly resolved     engines: { node: '>= 0.4.x' },
+33 silly resolved     scripts: { test: 'make test-all' },
+33 silly resolved     dependencies:
+33 silly resolved      { commander: '0.6.1',
+33 silly resolved        growl: '1.5.x',
+33 silly resolved        jade: '0.26.3',
+33 silly resolved        diff: '1.0.2',
+33 silly resolved        debug: '*',
+33 silly resolved        mkdirp: '0.3.3' },
+33 silly resolved     devDependencies: { should: '*', 'coffee-script': '1.2' },
+33 silly resolved     readme: ' [![Build Status](https://secure.travis-ci.org/visionmedia/mocha.png)](http://travis-ci.org/visionmedia/mocha)\n\n  [![Mocha test framework](http://f.cl.ly/items/3l1k0n2A1U3M1I1L210p/Screen%20Shot%202012-02-24%20at%202.21.43%20PM.png)](http://visionmedia.github.com/mocha)\n\n  Mocha is a simple, flexible, fun JavaScript test framework for node.js and the browser. For more information view the [documentation](http://visionmedia.github.com/mocha).\n\n## Contributors\n\n```\nproject: mocha\ncommits: 502\nfiles  : 86\nauthors: \n  352\tTj Holowaychuk          70.1%\n   98\tTJ Holowaychuk          19.5%\n   21\tGuillermo Rauch         4.2%\n    6\tJames Carr              1.2%\n    4\tJoshua Krall            0.8%\n    3\tBen Lindsey             0.6%\n    3\tNathan Rajlich          0.6%\n    2\tFARKAS Máté           0.4%\n    2\tQuang Van               0.4%\n    1\tSteve Mason             0.2%\n    1\tYuest Wang              0.2%\n    1\thokaccha                0.2%\n    1\tDavid Henderson         0.2%\n    1\tFedor Indutny           0.2%\n    1\tFredrik Lindin          0.2%\n    1\tHarry Brundage          0.2%\n    1\tKonstantin Käfer      0.2%\n    1\tMaciej Małecki         0.2%\n    1\tRaynos                  0.2%\n    1\tRyunosuke SATO          0.2%\n```\n\n## Links\n\n  - [Chai](https://github.com/chaijs/chai) - BDD, TDD, and assert for node & the browser\n  - [Should.js](http://github.com/visionmedia/should.js) - BDD style assertions for node\n  - [Expect.js](https://github.com/LearnBoost/expect.js) - BDD style assertions for node & the browser\n  - [Google Group](http://groups.google.com/group/mochajs)',
+33 silly resolved     _id: 'mocha@1.4.2',
+33 silly resolved     _from: 'mocha' } ]
+34 info install mocha@1.4.2 into /usr/lib
+35 info installOne mocha@1.4.2
+36 verbose from cache /home/johan/.npm/mocha/1.4.2/package/package.json
+37 info /usr/lib/node_modules/mocha unbuild
+38 verbose read json /usr/lib/node_modules/mocha/package.json
+39 verbose tar unpack /home/johan/.npm/mocha/1.4.2/package.tgz
+40 silly lockFile e330096e-usr-lib-node-modules-mocha /usr/lib/node_modules/mocha
+41 verbose lock /usr/lib/node_modules/mocha /home/johan/.npm/e330096e-usr-lib-node-modules-mocha.lock
+42 silly gunzTarPerm modes [ '777', '666' ]
+43 error Error: EACCES, mkdir '/usr/lib/node_modules/mocha'
+43 error  { [Error: EACCES, mkdir '/usr/lib/node_modules/mocha']
+43 error   errno: 3,
+43 error   code: 'EACCES',
+43 error   path: '/usr/lib/node_modules/mocha',
+43 error   fstream_type: 'Directory',
+43 error   fstream_path: '/usr/lib/node_modules/mocha',
+43 error   fstream_class: 'DirWriter',
+43 error   fstream_stack:
+43 error    [ 'DirWriter._create (/usr/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23)',
+43 error      '/usr/lib/node_modules/npm/node_modules/mkdirp/index.js:37:53',
+43 error      'Object.oncomplete (fs.js:297:15)' ] }
+44 error Please try running this command again as root/Administrator.
+45 error System Linux 3.4.9-1-ARCH
+46 error command "/usr/bin/node" "/usr/bin/npm" "install" "-g" "mocha"
+47 error cwd /home/johan/Git/TDP013/Lab2
+48 error node -v v0.8.8
+49 error npm -v 1.1.59
+50 error path /usr/lib/node_modules/mocha
+51 error fstream_path /usr/lib/node_modules/mocha
+52 error fstream_type Directory
+53 error fstream_class DirWriter
+54 error code EACCES
+55 error errno 3
+56 error stack Error: EACCES, mkdir '/usr/lib/node_modules/mocha'
+57 error fstream_stack DirWriter._create (/usr/lib/node_modules/npm/node_modules/fstream/lib/dir-writer.js:36:23)
+57 error fstream_stack /usr/lib/node_modules/npm/node_modules/mkdirp/index.js:37:53
+57 error fstream_stack Object.oncomplete (fs.js:297:15)
+58 verbose exit [ 3, true ]
