@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type” content="text/html;charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Laboration 1, TDP013</title>
 <link rel="stylesheet" type="text/css" href="css/style.css" />
 <link href='http://fonts.googleapis.com/css?family=Permanent+Marker' rel='stylesheet' type='text/css' />
@@ -19,7 +19,9 @@
 		<div id="error_msg"></div>
 
 		<form method="get" action="#" id="tweet_form">
-			<textarea id="tweet_textarea" placeholder="Tweeta ditt tweet" maxlength="140"></textarea>
+			<!-- maxlength and placeholder is a new tag in HTML5 according to W3:
+				http://www.w3schools.com/html5/att_textarea_maxlength.asp -->
+			<textarea id="tweet_textarea" placeholder="Tweeta ditt tweet" maxlength="140" rows="0" cols="0"></textarea>
 			<input type="submit" id="tweet_submit" value="Tweet" />
 		</form>
 		<div id="total_chars"></div>
