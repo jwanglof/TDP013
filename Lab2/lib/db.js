@@ -1,18 +1,26 @@
-var databaseUrl = "localhost:27017/tdp013laboration2";
-var collection = ["tweets"];
-var db = require("mongojs").connect(databaseUrl, collection);
+var mongo = require("mongodb");
 
-exports.db = db;
+var server = new mongo.Server("localhost", 27017);
+var db = new mongo.Db("tdp013lab2", server);
 
-/* When the DB is needed:
- * var db = require("./db");
- */
+var insertTweet = function(input_message) {
+	db.open(function(err, db) {
+		if (!err) {
+			console.log("DB connected");
+			db.collection("tweets", function(err, collection) {
+				var tweet_msg = {message: input_message, read: 0};
 
-/*db.tweets.save({message: "Le message from ze user", timestamp: "Le time"}, function(err, saved) {
-	if (err || !saved) {
-		console.log("Message not saved");
-	}
-	else {
-		console.log("Message saved");
-	}
-});*/
+				collection.insert(tweet_msg, function(err, result) {
+					if (!err) {
+						console.log("Inserted: " + input_message + " to the DB");
+					}
+					else {
+						console.log("Couldn't insert: " + input_message + " to the DB");
+					}
+				});
+			});
+		}
+	});
+}
+
+exports.insertTweet = insertTweet;

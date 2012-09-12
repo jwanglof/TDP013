@@ -9,6 +9,4 @@ handle["/save"] = requestHandlers.save;
 handle["/flag"] = requestHandlers.flag;
 handle["/getall"] = requestHandlers.getall;
 
-handle["/upload"] = requestHandlers.upload;
-
-server.start(router.route, handle);
+server.startServer(router.route, handle);
