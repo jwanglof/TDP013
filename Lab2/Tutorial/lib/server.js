@@ -6,7 +6,7 @@ function start(route, handle) {
 		var postData = "";
 		var pathname = url.parse(request.url).pathname;
 
-		// The favicon request output isn't shown in the console
+		// So that favicon request output isn't shown in the console
 		if (pathname != "/favicon.ico") {
 			console.log("Request for " + pathname + " received.");
 			
