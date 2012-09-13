@@ -20,11 +20,19 @@ function start(response, postData) {
 
 function save(response, querys) {
 	output_logger("Request handler 'save' was called.");
-	output_logger(querys);
-//	db.insertTweet("asd");
 
 	response.writeHead(200, {"Content-Type": "text/html"});
-	response.write("Hello Save");
+
+	db.insertTweet(querys["text"]);
+	response.write("Your text: " + querys["text"] + " was saved to the database. Perhaps anyway, no checks are done. Wopido");
+
+	/*if (message) {
+		response.write("Your text: " + querys["text"] + " was saved to the database.");
+	}
+	else {
+		response.write("Your text couldn't be saved to the database. Try again");
+	}*/
+
 	response.end();
 }
 
@@ -38,6 +46,8 @@ function flag(response, getData) {
 
 function getall(response, getData) {
 	output_logger("Request handler 'getall' was called.");
+
+	db.getDatabaseCollection("tweet_msg");
 
 	response.writeHead(200, {"Content-Type": "text/html"});
 	response.write("Hello Getall");
