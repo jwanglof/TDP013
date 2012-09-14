@@ -3,6 +3,7 @@ var mongo = require("mongodb");
 var server = new mongo.Server("localhost", 27017);
 var db = new mongo.Db("tdp013lab2", server);
 
+// Exists so it's easy to turn on or off all the console logging
 function output_logger(output_text) {
 	var logger = true;
 	if (logger) {
@@ -10,6 +11,13 @@ function output_logger(output_text) {
 	}
 }
 
+function fivehundred_error() {
+	response.writeHead(500, {"Content-Type": "text/html"});
+	response.write("500 Internal Server Error <br />");
+	response.end();
+}
+
+// The db connection will be always be open
 db.open(function(err, db) {
 	if (!err) {
 		output_logger("DB connected");
@@ -19,7 +27,7 @@ db.open(function(err, db) {
 				collection.insert(
 					{
 						message: input_message,
-						read: 0
+						flag: false
 					},
 					function(err, result) {
 						if (!err) {
@@ -27,7 +35,8 @@ db.open(function(err, db) {
 							callback(true);
 						}
 						else {
-							output_logger("Couldn't insert: " + input_message + " to the DB");
+							output_logger("COULD NOT insert: " + input_message + " to the DB");
+							fivehundred_error();
 							callback(false);
 						}
 					});
@@ -42,11 +51,21 @@ db.open(function(err, db) {
 						}
 					).toArray(
 						function(err, docs) {
-							callback(docs);
+							// Determine if the collection exist or not. Not very pretty though.
+							if (docs.length > 0) {
+								output_logger("Found the " + dbCollection + "-collection");
+								callback(docs);
+							}
+							else {
+								output_logger("COULD NOT find the " + dbCollection +"-collection");
+								fivehundred_error();
+								callback(false);
+							}
 						});
 				}
 				else {
-					output_logger("Couldn't get the collection.");
+					output_logger("COULD NOT find the collection.");
+					fivehundred_error();
 				}
 			});
 		}
@@ -71,11 +90,19 @@ db.open(function(err, db) {
 							multi: false //Update all records found, false as default
 						},
 						function(err, count) {
-							if (!err)
+							if (!err) {
+								output_logger("Updated " + dbCollection +"-collection, where ID: " + id + " with JSON-values: " + JSONvalue);
 								callback(true);
-							else
+							}
+							else {
+								output_logger("COULD NOT update " + dbCollection +"-collection, where ID: " + id + " with JSON-values: " + JSONvalue);
+								fivehundred_error();
 								callback(false);
+							}
 						});
+				}
+				else {
+					fivehundred_error();
 				}
 			});
 		}
@@ -86,6 +113,7 @@ db.open(function(err, db) {
 	}
 	else {
 		output_logger("An error occured when connecting to the DB");
+		fivehundred_error();
 	}
 });
 
