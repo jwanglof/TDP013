@@ -1,4 +1,6 @@
 var mongo = require("mongodb");
+var http = require("http");
+var url = require("url");
 
 var server = new mongo.Server("localhost", 27017);
 var db = new mongo.Db("tdp013lab2", server);
@@ -11,7 +13,7 @@ function output_logger(output_text) {
 	}
 }
 
-function fivehundred_error() {
+function fivehundred_error(response) {
 	response.writeHead(500, {"Content-Type": "text/html"});
 	response.write("500 Internal Server Error <br />");
 	response.end();

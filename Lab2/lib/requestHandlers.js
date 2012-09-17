@@ -50,18 +50,19 @@ function flag(response, querys) {
 		// Correct length
 		if (Buffer.byteLength(querys["id"]) == 24) {
 			db.updateCollection("tweets", querys["id"], {read: 2}, function(callbackValue) {
-				// Doesn't work by some unreasonable reason. callbackValue is set to true or false but response won't write anything on the site...
 				if (callbackValue)
 					response.write("The id " + querys["id"] + " is updated.");
 				else
 					response.write("The id " + querys["id"] + " was NOT updated.");
+
+				response.end();
 			});
 		}
 		// Incorrect length
-		else if (Buffer.byteLength(querys["id"]) < 24 || Buffer.byteLength(querys["id"]) > 24)
+		else if (Buffer.byteLength(querys["id"]) < 24 || Buffer.byteLength(querys["id"]) > 24) {
 			response.write("Invalid ID. It has to be 24 characters");
-
-		response.end();
+			response.end();
+		}
 	}
 	else {
 		response.writeHead(400, {"Content-Type": "text/html"});
@@ -81,12 +82,11 @@ function getall(response, getData) {
 	// Get all the data from tweets-collection and show is as JSON
 	db.getCollection("tweets", function(docs) {
 		if (docs != false) {
-			response.write(JSON.stringify(docs));
+			response.write("JSON values returned. Check your console.");
 			db.output_logger(JSON.stringify(docs));
+			response.end();
 		}
 	});
-
-	response.end();
 }
 
 
