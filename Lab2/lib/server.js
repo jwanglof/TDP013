@@ -1,6 +1,8 @@
 var http = require("http");
 var url = require("url");
 
+var ol = require("./output_logger.js");
+
 function startServer(route, handle) {
 	function onRequest(request, response) {
 		if (request.method == "GET") {
@@ -8,7 +10,7 @@ function startServer(route, handle) {
 
 			// The favicon request output isn't shown in the console
 			if (pathname != "/favicon.ico") {
-				console.log("Request for " + pathname + " received.");
+				ol.output_logger("Request for " + pathname + " received.", "server.js");
 
 				var querys = url.parse(request.url, true).query;
 
@@ -24,14 +26,14 @@ function startServer(route, handle) {
 		}
 		else {
 			response.writeHead(405, {"Content-Type": "text/html"});
-			response.write("400 Method Not Allowed <br />");
+			response.write("405 Method Not Allowed <br />");
 			response.end();
 		}
 	}
 
 	http.createServer(onRequest).listen(8888);
 
-	console.log("Server has started.");
+	ol.output_logger("Server has started.", "server.js");
 }
 
 exports.startServer = startServer;

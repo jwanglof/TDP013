@@ -2,16 +2,10 @@ var mongo = require("mongodb");
 var http = require("http");
 var url = require("url");
 
+var ol = require("./output_logger.js");
+
 var server = new mongo.Server("localhost", 27017);
 var db = new mongo.Db("tdp013lab2", server);
-
-// Exists so it's easy to turn on or off all the console logging
-function output_logger(output_text) {
-	var logger = true;
-	if (logger) {
-		console.log(output_text);
-	}
-}
 
 function fivehundred_error(response) {
 	response.writeHead(500, {"Content-Type": "text/html"});
@@ -22,7 +16,7 @@ function fivehundred_error(response) {
 // The db connection will be always be open
 db.open(function(err, db) {
 	if (!err) {
-		output_logger("DB connected");
+		ol.output_logger("DB connected", "db.js");
 
 		var insertTweet = function(input_message, callback) {
 			db.collection("tweets", function(err, collection) {
@@ -33,13 +27,12 @@ db.open(function(err, db) {
 					},
 					function(err, result) {
 						if (!err) {
-							output_logger("Inserted: " + input_message + " to the DB");
+							ol.output_logger("Inserted: " + input_message + " to the DB", "db.js");
 							callback(true);
 						}
 						else {
-							output_logger("COULD NOT insert: " + input_message + " to the DB");
+							ol.output_logger("COULD NOT insert: " + input_message + " to the DB", "db.js");
 							fivehundred_error();
-							callback(false);
 						}
 					});
 			});
@@ -55,25 +48,25 @@ db.open(function(err, db) {
 						function(err, docs) {
 							// Determine if the collection exist or not. Not very pretty though.
 							if (docs.length > 0) {
-								output_logger("Found the " + dbCollection + "-collection");
+								ol.output_logger("Found the " + dbCollection + "-collection", "db.js");
 								callback(docs);
 							}
 							else {
-								output_logger("COULD NOT find the " + dbCollection +"-collection");
+								ol.output_logger("COULD NOT find the " + dbCollection +"-collection", "db.js");
 								fivehundred_error();
 								callback(false);
 							}
 						});
 				}
 				else {
-					output_logger("COULD NOT find the collection.");
+					ol.output_logger("COULD NOT find the collection.", "db.js");
 					fivehundred_error();
 				}
 			});
 		}
 
 		var updateCollection = function(dbCollection, id, JSONvalue, callback) {
-			output_logger("Called updateCollection");
+			ol.output_logger("Called updateCollection", "db.js");
 
 			db.collection(dbCollection, function(err, collection) {
 				if (!err) {
@@ -93,11 +86,11 @@ db.open(function(err, db) {
 						},
 						function(err, count) {
 							if (!err) {
-								output_logger("Updated " + dbCollection +"-collection, where ID: " + id + " with JSON-values: " + JSONvalue);
+								ol.output_logger("Updated " + dbCollection +"-collection, where ID: " + id + " with JSON-values: " + JSONvalue, "db.js");
 								callback(true);
 							}
 							else {
-								output_logger("COULD NOT update " + dbCollection +"-collection, where ID: " + id + " with JSON-values: " + JSONvalue);
+								ol.output_logger("COULD NOT update " + dbCollection +"-collection, where ID: " + id + " with JSON-values: " + JSONvalue, "db.js");
 								fivehundred_error();
 								callback(false);
 							}
@@ -114,9 +107,7 @@ db.open(function(err, db) {
 		exports.updateCollection = updateCollection;
 	}
 	else {
-		output_logger("An error occured when connecting to the DB");
+		ol.output_logger("An error occured when connecting to the DB", "db.js");
 		fivehundred_error();
 	}
 });
-
-exports.output_logger = output_logger;
