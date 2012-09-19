@@ -72,7 +72,7 @@ describe("Server", function() {
 		it("should return a 400 error since the text is too long ?text=", function(done) {
 			request(endpoint + "/save?text=12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890").end(function(res) {
 				res.should.have.status(400);
-				res.text.should.equal("400 Bad Request <br />Your text is too large. Please shorten it to 140 characters or less. <br />I.e. save?text=Someawesometextstring");
+				res.text.should.equal("400 Bad Request <br />Your text is too long. Please shorten it to 140 characters or less. <br />I.e. save?text=Someawesometextstring");
 				done();
 			});
 		});
@@ -96,10 +96,65 @@ describe("Server", function() {
 	});
 
 	describe("Get 400 from /flag", function() {
-		it("should return a 400 error since the id 
+		it("should return a 400 error since the id-length is incorrect", function(done) {
+			request(endpoint + "/flag?id=wronglength").end(function(res) {
+				res.should.have.status(400);
+				res.text.should.equal("400 Bad Request <br />Invalid ID. It has to be 24 characters");
+				done();
+			});
+		});
+	});
+
+	describe("Get 400 from /flag", function() {
+		it("should return a 400 error since the user hasn't specified an ID to check for", function(done) {
+			request(endpoint + "/flag").end(function(res) {
+				res.should.have.status(400);
+				res.text.should.equal("400 Bad Request <br />There is no ID to check for. The URL need to have an id-value. <br />I.e. flag?id=xxxxxxxxxxxxxxxxxxxxxxxx");
+				done();
+			});
+		});
+	});
+
+	describe("Get 400 from /flag", function() {
+		it("should return a 400 error since the user hasn't specified an ID to check for", function(done) {
+			request(endpoint + "/flag?notavalidid=andtooshort").end(function(res) {
+				res.should.have.status(400);
+				res.text.should.equal("400 Bad Request <br />There is no ID to check for. The URL need to have an id-value. <br />I.e. flag?id=xxxxxxxxxxxxxxxxxxxxxxxx");
+				done();
+			});
+		});
+	});
 	/*
 	 * End of Test /flag
 	 */
+
+
+
+	/*
+	 * Test /getall
+	 */
+	describe("Get 200 from /getall", function() {
+		it("should return a 200 since it doesn't make any sense to return anything else, imo..", function(done) {
+			request(endpoint + "/getall").end(function(res) {
+				res.should.have.status(200);
+				res.text.should.equal("JSON values returned. Check your console.");
+				done();
+			});
+		});
+	});
+
+	describe("POST", function() {
+		it("should return a 405 error", function(done) {
+			request.post(endpoint + "/getall").send( {test: "test"}).end(function(res) {
+				res.should.have.status(405);
+				done();
+			});
+		});
+	});
+	/*
+	 * End Test /getall
+	 */
+
 
 	/* 
 	 * Test 404 Not Found

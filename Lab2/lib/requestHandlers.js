@@ -22,10 +22,8 @@ function save(response, querys) {
 	else
 		var stringLength = 0;
 
-	// Check to see the string isn't empty and it's less then 140 chars and more than 0
+	// Check so the string is less then 140 chars and more than 0 chars
 	if (stringLength <= 140 && stringLength > 0) {
-
-
 		// Inserts the message
 		db.insertTweet(querys["text"], function(callbackValue) {
 			if (callbackValue) {
@@ -48,7 +46,7 @@ function save(response, querys) {
 		if (stringLength <= 0)
 			response.write("You have to send a text to be inserted into the DB. <br />");
 		else if (stringLength > 140)
-			response.write("Your text is too large. Please shorten it to 140 characters or less. <br />");
+			response.write("Your text is too long. Please shorten it to 140 characters or less. <br />");
 
 		response.write("I.e. save?text=Someawesometextstring");
 		response.end();
@@ -65,14 +63,17 @@ function flag(response, querys) {
 		// Correct length
 		if (Buffer.byteLength(querys["id"]) == 24) {
 			db.updateCollection("tweets", querys["id"], {read: 2}, function(callbackValue) {
-				response.writeHead(200, {"Content-Type": "text/html"});
 
-				if (callbackValue)
+				if (callbackValue) {
+					response.writeHead(200, {"Content-Type": "text/html"});
 					response.write("The id " + querys["id"] + " is updated.");
+					response.end();
+				}
+				/* Already check this in db.js
 				else
 					response.write("The id " + querys["id"] + " was NOT updated.");
+				 */
 
-				response.end();
 			});
 		}
 
