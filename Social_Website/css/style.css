@@ -1,0 +1,61 @@
+body {
+		background-color: #fafac6;
+		padding: 0px;
+		margin: 0px;
+}
+
+div#container {
+		width: 1200px;
+		border: 0px solid #ff0000;
+}
+
+div#container #topmenu {
+		border-top: 0px;
+		border-right: 0px solid #000000;
+		border-left: 0px solid #000000;
+		border-bottom: 1px solid #000000;
+
+		background-color: #d40015;
+		height: 30px;
+		position: fixed;
+		z-index: 100;
+		width: 100%;
+}
+
+div#topmenu #fejk {
+		padding: 4px 10px;
+		float: left;
+}
+
+div#topmenu #fejk2 {
+		padding: 4px 10px;
+		float: right;
+}
+
+div#container #content {
+		border: 0px solid #000000;
+
+		padding-top: 30px;
+		margin: 0px auto;
+		width: 95%;
+}
+
+div#content #center {
+		float: left;
+		width: 70%;
+		padding: 5px 10px;
+}
+
+.input_holder {
+		display: block;
+		width: 500px;
+}
+
+.input_pass {
+		margin: 20px 0px;
+}
+
+.input {
+		border: 1px solid #c0c0c0;
+		width: 300px;
+}

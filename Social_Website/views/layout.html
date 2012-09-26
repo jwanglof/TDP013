@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<title>TDP013: Social website - {% block title %}{% endblock %}</title>
+		<link type="text/css" href="style/flick/jquery-ui-1.8.23.custom.css" rel="stylesheet" />
+		<link type="text/css" href="style/screen.css" rel="stylesheet" />
+		<script type="text/javascript" src="javascript/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="javascript/jquery-ui-1.8.23.custom.min.js"></script>
+  <script type="text/javascript" src="http://jzaefferer.github.com/jquery-validation/jquery.validate.js"></script>
+		<script type="text/javascript" src="javascript/scripts.js"></script>
+	</head>
+	<body>
+		<div id="container">
+			
+			<div id="topmenu">
+				<div id="fejk">
+					<a href="/">Home</a> [Search window]
+				</div>
+				<div id="fejk2">
+					<a href="/register">Register</a> | <a href="/login">Login</a>
+				</div>
+			</div>
+
+			<div id="content">
+				<div id="center">
+					{% block center_content %}{% endblock %}
+				</div>
+			</div>
+
+		</div>
+	</body>
+</html>
+
+
