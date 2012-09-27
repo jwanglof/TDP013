@@ -15,10 +15,15 @@
 			
 			<div id="topmenu">
 				<div id="fejk">
-					<a href="/">Home</a> [Search window]
+					<a href="/" style="float: left">Home</a>
+					<div style="float: left"><form method="post" action="/search"><input type="text" name="search" placeholder="Search for user" /><input type="submit" value="Search..." /></form></div>
 				</div>
 				<div id="fejk2">
+					{% if session %}
+					<a href="/profile">Profile</a> | <a href="/friends">Friends</a> | <a href="/logout">Logout</a>
+					{% else %}
 					<a href="/register">Register</a> | <a href="/login">Login</a>
+					{% endif %}
 				</div>
 			</div>
 

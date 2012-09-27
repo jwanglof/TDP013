@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block center_content %}
+{% for info in userInfo %}
+<h1>Profile</h1>
+<h3>Welcome back, {{ info.firstname }}.</h3>
+
+<p>
+<h4>Your information:</h4>
+Name: {{ info.firstname }} {{ info.surname }} <br />
+E-mail: {{ info.email }} <br />
+User ID: {{ info._id }}
+</p>
+{% endfor %}
+{% endblock %}

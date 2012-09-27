@@ -4,17 +4,19 @@
 
 {% block center_content %}
 <h1>Login</h1>
-<form method="post" action="#">
-	<span class="input_holder">
-		<input type="text" id="login_email" class="input" placeholder="E-mail" />
-		<kbd>E-mail</kbd>
-	</span>
-
-	<span class="input_holder">
-		<input type="password" id="login_pass" class="input" placeholder="Password" />
-		<kbd>Password</kbd>
-	</span>
-
-	<input type="submit" id="login_submit" class="input" value="Log in" />
+<form method="post" action="/login/get" class="jwform">
+	<fieldset>
+		<ol>
+			<li>
+				<label for="email">E-mail</label>
+				<input type="text" name="email" placeholder="E-mail" />
+			</li>
+			<li>
+				<label for="password">Password</label>
+				<input type="password" name="password" placeholder="Password" />
+			</li>
+		</ol>
+	</fieldset>
+	<input type="submit" value="Log in" />
 </form>
 {% endblock %}
