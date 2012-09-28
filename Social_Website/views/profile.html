@@ -3,15 +3,25 @@
 {% block title %}Profile{% endblock %}
 
 {% block center_content %}
-{% for info in userInfo %}
+
 <h1>Profile</h1>
-<h3>Welcome back, {{ info.firstname }}.</h3>
+<h3>Welcome back, {{ userInfo.firstname }}.</h3>
 
 <p>
 <h4>Your information:</h4>
-Name: {{ info.firstname }} {{ info.surname }} <br />
-E-mail: {{ info.email }} <br />
-User ID: {{ info._id }}
+Name: {{ userInfo.firstname }} {{ userInfo.surname }} <br />
+E-mail: {{ userInfo.email }} <br />
+User ID: {{ userInfo._id }}
 </p>
-{% endfor %}
+{% if sessionEmail != userInfo.email %}
+<a href="/addfriend?friendId={{ userInfo._id }}">Add friend</a>
+<h4>Write on my wall</h4>
+<form method="post" action="/wallpost">
+	<textarea rows="5" cols="40" name="wallpost" placeholder="A wall of text"></textarea>
+	<input type="submit" value="Write" />
+</form>
+{% else %}
+""
+{% endif %}
+
 {% endblock %}

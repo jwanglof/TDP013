@@ -63,27 +63,24 @@ mongo_db.open(function(err, db) {
 		var getUser = function(json_data, callback) {
 			ol.logger("getUser() called", "db.js");
 			if (mongo_db._state == "connected") {
+				if (json_data["_id"])
+					json_data["_id"] = new mongodb.BSONPure.ObjectID.createFromHexString(json_data["_id"]);
+
 				mongo_db.collection("users", function(err, collection) {
 					if (!err) {
-						collection.find(
-							/*{
-								"email": json_data["email"],
-								"password": json_data["password"]
-							},*/
+						collection.findOne(
 							json_data,
-							{
-								"limit": 1
+							function(err, docs) {
+								if (!err) {
+									ol.logger("Returned a user from getUser()", "db.js");
+									callback(true, docs);
+								}
+								else {
+									ol.logger("Error when fetching from getUser()", "db.js");
+									callback(false, {"nothing": true});
+								}
 							}
-						).toArray(function(err, docs) {
-							// Determine if the collection exist or not. Not very pretty though.
-							if (docs.length > 0) {
-								ol.logger("Returning \"users\" collection", "db.js");
-								callback(true, docs);
-							}
-							else {
-								callback(false);
-							}
-						});
+						);
 					}
 					else {
 						ol.logger(err);
@@ -106,24 +103,20 @@ mongo_db.open(function(err, db) {
 		var getUserFriends = function(json_data, callback) {
 			ol.logger("getUserFriends() called", "db.js");
 			if (mongo_db._state == "connected") {
+				var userId = new mongodb.BSONPure.ObjectID.createFromHexString(json_data);
+
 				mongo_db.collection("users", function(err, collection) {
 					if (!err) {
-						collection.find(
+						collection.findOne(
 							{
-								"email": json_data
+								_id: userId
 							},
-							{
-								"limit": 1
+							function(err, docs) {
+								if (!err) {
+									callback(true, docs["friends"]);
+								}
 							}
-						).toArray(function(err, docs) {
-							if (docs.length > 0) {
-								ol.logger("Returning a user's friends", "db.js");
-								//Return only this>> console.log(docs[0]["friends"]);
-								callback(true, docs);
-							}
-							else
-								callback(false);
-						});
+						);
 					}
 				});
 			}
@@ -164,6 +157,61 @@ mongo_db.open(function(err, db) {
 		 * search()
 		 */
 
+		/*
+		 * addUserFriend()
+		 */
+		var addUserFriend = function(json_data, callback) {
+			ol.logger("addUserFriend() called", "db.js");
+			if (mongo_db._state == "connected") {
+				var userId = new mongodb.BSONPure.ObjectID.createFromHexString(json_data["_id"]);
+
+				mongo_db.collection("users", function(err, collection) {
+					if (!err) {
+						collection.update(
+							{
+								"_id": userId
+							},
+							{
+								$push: { "friends": json_data["friendId"] }
+							},
+							{
+								safe: true
+							},
+							function(err, res) {
+								if (!err) {
+									callback(true);
+								}
+								else {
+									callback(false);
+								}
+							}
+						)
+					 }
+				});
+			}
+			else
+				ol.logger("ERROR: The DB-connection is not open!", "db.js");
+		}
+		/*
+		 * addUserFriend()
+		 */
+
+		/*
+		 * addWallText()
+		 */
+		var addWallText = function(json_data, callback) {
+			ol.logger("addWallText() called", "db.js");
+			if (mongo_db._state == "connected") {
+				
+			}
+			else
+				ol.logger("ERROR: The DB-connection is not open!", "db.js");
+		}
+		/*
+		 * addWallText()
+		 */
+
+
 	}
 	else
 		ol.logger("DB connection NOT OPEN", "db.js");
@@ -172,4 +220,5 @@ mongo_db.open(function(err, db) {
 	exports.getUser = getUser;
 	exports.getUserFriends = getUserFriends;
 	exports.search = search;
+	exports.addUserFriend = addUserFriend;
 });

@@ -6,7 +6,9 @@
 {% for result in searchResult %}
 <h1>Search Result</h1>
 <h3>Total matches: {{ searchResultTotal }}</h3>
-Name: <a href="/profile/{{ result._id }}">{{ result.firstname }} {{ result.surname }}</a> <br />
+Name: <a href="/profile?profileId={{ result._id }}">{{ result.firstname }} {{ result.surname }}</a> <br />
 E-mail: {{ result.email }}
 {% endfor %}
+
+
 {% endblock %}

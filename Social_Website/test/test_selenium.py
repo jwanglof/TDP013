@@ -18,7 +18,7 @@ inputElement.send_keys("jwanglof@gmail.com")
 
 # Sleep for a while so it's possible to see what's happening.
 # Will be more sleeps further that wont have any comments.
-time.sleep(0.2)
+#time.sleep(0.2)
 
 inputElement2 = driver.find_element_by_name("password");
 inputElement2.send_keys("asdasd");
