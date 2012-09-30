@@ -46,6 +46,7 @@ var getSessionStatus = function(req, callback) {
 	else
 		var setSession = false;
 
+
 	return setSession;
 }
 
@@ -63,6 +64,19 @@ var getFriends = function(friends, callback) {
 				callback(friendsArray);
 		});
 	}
+}
+
+var getWallPosts = function(userId, callback) {
+	db.getWallText({to_id: userId}, function(err, result) {
+		//		callback(result);
+		// result[i]["from_id"] should get the users name from getUser()
+		// Add to an array and return
+		for (var i = 0; i < result.length; i++) {
+			console.log(i + " -- " + result[i]["from_id"]);
+		}
+
+		callback(result);
+	});
 }
 
 app.get("/", function(req, res) {
@@ -115,15 +129,26 @@ app.get("/logout", function(req, res) {
 app.get("/profile", function(req, res) {
 	// Check that the session-email really exist. Or is this maybe to advanced for this course?
 	
-	if (req.query.profileId) {
-		db.getUser({"_id": req.query.profileId}, function(callback, result) {
-			res.render(VIEWS_DIR + "profile.html", {session: getSessionStatus(req), userInfo: result, sessionEmail: req.session.email});
+	if (req.query.userId || req.session.userId) {
+		if (req.query.userId)
+			var getId = req.query.userId;
+		else if (req.session.userId)
+			var getId = req.session.userId;
+
+		db.getUser({_id: getId}, function(callback, result) {
+			getWallPosts(getId, function(returnedWallPosts) {
+				res.render(VIEWS_DIR + "profile.html", {session: getSessionStatus(req), userInfo: result, sessionEmail: req.session.email, wallPosts: returnedWallPosts});
+			});
+		});
+
+/*		db.getUser({"_id": req.query.userId}, function(callback, result) {
+			res.render(VIEWS_DIR + "profile.html", {session: getSessionStatus(req), userInfo: result, sessionEmail: req.session.email, wallPosts: getWallPosts(req.query.userId)});
 		});
 	}
 	else if (req.session.userId) {
 		db.getUser({"_id": req.session.userId}, function(callback, result) {
-			res.render(VIEWS_DIR + "profile.html", {session: getSessionStatus(req), userInfo: result, sessionEmail: req.session.email});
-		});
+			res.render(VIEWS_DIR + "profile.html", {session: getSessionStatus(req), userInfo: result, sessionEmail: req.session.email, wallPosts: getWallPosts(req.session.userId)});
+		});*/
 	}
 	else
 		res.redirect("/login?unsuccessful=true");
@@ -149,7 +174,7 @@ app.get("/friends", function(req, res) {
 });
 
 app.get("/addfriend", function(req, res) {
-	db.addUserFriend({"_id": req.session.usoerId, "friendId": req.query.friendId}, function(callback, result) {
+	db.addUserFriend({"_id": req.session.userId, "friendId": req.query.friendId}, function(callback, result) {
 		if (callback)
 			res.redirect("/friends");
 	});
@@ -162,8 +187,13 @@ app.post("/search", function(req, res) {
 });
 
 app.post("/wallpost", function(req, res) {
-	
-	redirect("/profile");
+//	console.log(req.body + "  --  " + req.session.userId + " -- " + req.body.hidden_userid);
+	db.addWallText({wallpost: req.body["wallpost"], to_id: req.body.hidden_userid, from_id: req.session.userId}, function(callback) {
+		if (callback)
+			res.redirect("/profile?userId=" + req.body.hidden_userid);
+		else
+			res.redirect("/temp");
+	});
 });
 
 app.get("/temp", function(req, res) {

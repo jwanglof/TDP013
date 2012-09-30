@@ -20,14 +20,18 @@ inputElement.send_keys("jwanglof@gmail.com")
 # Will be more sleeps further that wont have any comments.
 #time.sleep(0.2)
 
-inputElement2 = driver.find_element_by_name("password");
-inputElement2.send_keys("asdasd");
+inputElement = driver.find_element_by_name("password");
+inputElement.send_keys("asdasd");
 
 # Submit the form
 # Same as sleep, will have more of these that wont have any comments
 inputElement.submit()
 
-driver.get("http://127.0.0.1:3000/friends");
+driver.get("http://127.0.0.1:3000/profile?userId=50658e6a9ecfe43b2e000001");
+
+inputElement = driver.find_element_by_name("wallpost");
+inputElement.send_keys("Hej du din fule!");
+inputElement.submit()
 
 """
 time.sleep(1)

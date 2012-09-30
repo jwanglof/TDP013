@@ -38,8 +38,6 @@ mongo_db.open(function(err, db) {
 						function(err, res) {
 							if (!err) {
 								ol.logger("User added to DB", "db.js");
-								ol.logger("Data added:", "db.js");
-								ol.logger(json_data, "db.js");
 								callback(true);
 							}
 							else {
@@ -185,7 +183,7 @@ mongo_db.open(function(err, db) {
 									callback(false);
 								}
 							}
-						)
+						);
 					 }
 				});
 			}
@@ -202,7 +200,24 @@ mongo_db.open(function(err, db) {
 		var addWallText = function(json_data, callback) {
 			ol.logger("addWallText() called", "db.js");
 			if (mongo_db._state == "connected") {
-				
+				mongo_db.collection("wallposts", function(err, collection) {
+					collection.insert(
+						json_data,
+						{
+							safe: true
+						},
+						function(err, res) {
+							if (!err) {
+								ol.logger("Inserted a wall post to DB", "db.js");
+								callback(true);
+							}
+							else {
+								ol.logger("ERROR: Wall not not added to DB", "db.js");
+								callback(false);
+							}
+						}
+					);
+				});
 			}
 			else
 				ol.logger("ERROR: The DB-connection is not open!", "db.js");
@@ -211,6 +226,38 @@ mongo_db.open(function(err, db) {
 		 * addWallText()
 		 */
 
+	
+		/*
+		 * getWallText()
+		 */
+		var getWallText = function(json_data, callback) {
+			ol.logger("getWallText() called", "db.js");
+			if (mongo_db._state == "connected") {
+				mongo_db.collection("wallposts", function(err, collection) {
+					if (!err) {
+						collection.find(
+							json_data
+						).toArray(function(err, docs) {
+							console.log(docs);
+							if (docs && docs.length > 0) {
+								ol.logger("Returning a user's wallposts", "db.js");
+								callback(true, docs);
+							}
+							else {
+								ol.logger("ERROR: Could not return a user's wallposts", "db.js");
+								callback(false);
+							}
+						});
+					}
+				});
+			}
+			else
+				ol.logger("ERROR: The DB-connection is not open!", "db.js");
+		}
+		/*
+		 * getWallText()
+		 */
+		
 
 	}
 	else
@@ -221,4 +268,6 @@ mongo_db.open(function(err, db) {
 	exports.getUserFriends = getUserFriends;
 	exports.search = search;
 	exports.addUserFriend = addUserFriend;
+	exports.addWallText = addWallText;
+	exports.getWallText = getWallText;
 });
