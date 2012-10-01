@@ -13,8 +13,12 @@ Name: {{ userInfo.firstname }} {{ userInfo.surname }} <br />
 E-mail: {{ userInfo.email }} <br />
 User ID: {{ userInfo._id }}
 </p>
-{% if sessionEmail != userInfo.email %}
+{% if userId != userInfo._id %}
+{% if !friendship %}
 <a href="/addfriend?friendId={{ userInfo._id }}">Add friend</a>
+{% else %}
+Already buds
+{% endif %}
 <h4>Write on my wall</h4>
 <form method="post" action="/wallpost">
 	<textarea rows="5" cols="40" name="wallpost" placeholder="A wall of text"></textarea>
@@ -23,12 +27,13 @@ User ID: {{ userInfo._id }}
 	<input type="submit" value="Write" />
 	</p>
 </form>
-{% else %}
-""
 {% endif %}
-{{ wallPosts }}
+<h4>My wall posts</h4>
 {% for wallPost in wallPosts %}
+<div class="wallpost">
 {{ wallPost.wallpost }} <br />
+From: <a href="/profile?userId={{ wallPost.from_id }}">{{ wallPost.from_user }}</a>
+</div>
 {% endfor %}
 
 {% endblock %}

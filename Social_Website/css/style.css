@@ -60,3 +60,10 @@ div#content #center {
 		border: 1px solid #c0c0c0;
 		width: 300px;
 }
+
+.wallpost {
+		border-bottom: 1px solid #c0c0c0;
+		width: 300px;
+		overflow: auto;
+		margin-bottom: 5px;
+}

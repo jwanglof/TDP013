@@ -71,7 +71,6 @@ mongo_db.open(function(err, db) {
 							function(err, docs) {
 								if (docs != null && !err) {
 									ol.logger("Returned a user from getUser()", "db.js");
-
 									callback(true, docs);
 								}
 								else {
@@ -140,7 +139,8 @@ mongo_db.open(function(err, db) {
 								"email": json_data
 							}
 						).toArray(function(err, docs) {
-							if (docs.length > 0) {
+							console.log(docs);
+							if (docs != [] && docs.length > 0) {
 								callback(true, docs);
 							}
 							else
@@ -163,28 +163,31 @@ mongo_db.open(function(err, db) {
 			ol.logger("addUserFriend() called", "db.js");
 			if (mongo_db._state == "connected") {
 				var userId = new mongodb.BSONPure.ObjectID.createFromHexString(json_data["_id"]);
-
+				var friendId = new mongodb.BSONPure.ObjectID.createFromHexString(json_data["friendId"]);
+				
 				mongo_db.collection("users", function(err, collection) {
 					if (!err) {
+						// Add the friend to the user that requested the friendship
 						collection.update(
 							{
 								"_id": userId
 							},
 							{
 								$push: { "friends": json_data["friendId"] }
-							},
-							{
-								safe: true
-							},
-							function(err, res) {
-								if (!err) {
-									callback(true);
-								}
-								else {
-									callback(false);
-								}
 							}
 						);
+
+						// Add the user to the friend
+						collection.update(
+							{
+								"_id": friendId
+							},
+							{
+								$push: { "friends": json_data["_id"] }
+							}
+						);
+
+						callback(true);
 					 }
 				});
 			}
@@ -241,6 +244,7 @@ mongo_db.open(function(err, db) {
 						).toArray(function(err, docs) {
 							if (docs != [] && docs.length > 0) {
 								ol.logger("Returning a user's wallposts", "db.js");
+								//callback(true, JSON.stringify(docs));
 								callback(true, docs);
 							}
 							else {
@@ -258,6 +262,35 @@ mongo_db.open(function(err, db) {
 		 * getWallText()
 		 */
 		
+		
+		var checkFriendship = function(json_data, callback) {
+			ol.logger("checkFriendship() called", "db.js");
+			if (mongo_db._state == "connected") {
+
+				var userId = new mongodb.BSONPure.ObjectID.createFromHexString(json_data["userId"]);
+				var friendId = new mongodb.BSONPure.ObjectID.createFromHexString(json_data["friendId"]);
+
+				mongo_db.collection("users", function(err, collection) {
+					var callbackBool = false;
+					if (!err) {
+						collection.findOne(
+							{
+								_id: {$in: [userId, friendId]},
+								friends: {$in: [json_data["userId"], json_data["friendId"]]}
+							},
+							function(err, docs) {
+								if (docs)
+									callback(true);
+								else
+									callback(false);
+							});
+					}
+				});
+			}
+			else
+				ol.logger("ERROR: The DB-connection is not open!", "db.js");
+		}
+
 
 	}
 	else
@@ -270,4 +303,5 @@ mongo_db.open(function(err, db) {
 	exports.addUserFriend = addUserFriend;
 	exports.addWallText = addWallText;
 	exports.getWallText = getWallText;
+	exports.checkFriendship = checkFriendship;
 });

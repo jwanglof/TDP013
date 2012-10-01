@@ -50,7 +50,6 @@ var getSessionStatus = function(req, callback) {
 	return setSession;
 }
 
-
 var getFriends = function(friends, callback) {
 	var friendsArray = new Array();
 
@@ -68,19 +67,24 @@ var getFriends = function(friends, callback) {
 		callback();
 }
 
+var checkFriendship = function(user, friend, callback) {
+	db.checkFriendship({userId: user, friendId: friend}, function(good) {
+		callback(good);
+	});
+}
+
 var getWallPosts = function(userId, callback) {
-	db.getWallText({to_id: userId}, function(err, result) {
-		//		callback(result);
-		// result[i]["from_id"] should get the users name from getUser()
-		// Add to an array and return
-		if (err) {
+	var wallpostArray = new Array();
+	db.getWallText({to_id: userId}, function(good, result) {
+		if (good) {
 			for (var i = 0; i < result.length; i++) {
 				var res_wallpost = result[i]["wallpost"];
 
 				db.getUser({_id: result[i]["from_id"]}, function(err, user_result) {
-					callback({wallpost: res_wallpost, from_user: user_result.firstname});
+					wallpostArray.push({wallpost: res_wallpost, from_user: user_result.firstname, from_id: user_result._id});
 				});
 			}
+			callback(wallpostArray);
 		}
 		else
 			callback();
@@ -88,6 +92,10 @@ var getWallPosts = function(userId, callback) {
 }
 
 app.get("/", function(req, res) {
+	res.render(VIEWS_DIR + "index.html", {session: getSessionStatus(req)});
+});
+
+app.get("/home", function(req, res) {
 	res.render(VIEWS_DIR + "index.html", {session: getSessionStatus(req)});
 });
 
@@ -114,7 +122,6 @@ app.get("/login", function(req, res) {
 
 app.post("/login/get", function(req, res) {
 	db.getUser(req.body, function(callback, result) {
-		console.log("--------" + result);
 		if (callback) {
 			req.session.userId = result._id;
 			req.session.save();
@@ -135,27 +142,25 @@ app.get("/logout", function(req, res) {
 
 app.get("/profile", function(req, res) {
 	// Check that the session-email really exist. Or is this maybe to advanced for this course?
-	
+
 	if (req.query.userId || req.session.userId) {
 		if (req.query.userId)
 			var getId = req.query.userId;
 		else if (req.session.userId)
 			var getId = req.session.userId;
 
+		var friendship;
+		if (req.query.userId) {
+			checkFriendship(req.session.userId, req.query.userId, function(returnedFriendship) {
+				friendship = returnedFriendship;
+			});
+		}
+
 		db.getUser({_id: getId}, function(callback, result) {
 			getWallPosts(getId, function(returnedWallPosts) {
-				res.render(VIEWS_DIR + "profile.html", {session: getSessionStatus(req), userInfo: result, wallPosts: returnedWallPosts});
+				res.render(VIEWS_DIR + "profile.html", {session: getSessionStatus(req), userInfo: result, wallPosts: returnedWallPosts, userId: req.session.userId, friendship: friendship});
 			});
 		});
-
-/*		db.getUser({"_id": req.query.userId}, function(callback, result) {
-			res.render(VIEWS_DIR + "profile.html", {session: getSessionStatus(req), userInfo: result, sessionEmail: req.session.email, wallPosts: getWallPosts(req.query.userId)});
-		});
-	}
-	else if (req.session.userId) {
-		db.getUser({"_id": req.session.userId}, function(callback, result) {
-			res.render(VIEWS_DIR + "profile.html", {session: getSessionStatus(req), userInfo: result, sessionEmail: req.session.email, wallPosts: getWallPosts(req.session.userId)});
-		});*/
 	}
 	else
 		res.redirect("/login?unsuccessful=true");
@@ -181,7 +186,7 @@ app.get("/friends", function(req, res) {
 });
 
 app.get("/addfriend", function(req, res) {
-	db.addUserFriend({"_id": req.session.userId, "friendId": req.query.friendId}, function(callback, result) {
+	db.addUserFriend({_id: req.session.userId, friendId: req.query.friendId}, function(callback, result) {
 		if (callback)
 			res.redirect("/friends");
 	});
@@ -189,6 +194,9 @@ app.get("/addfriend", function(req, res) {
 
 app.post("/search", function(req, res) {
 	db.search(req.body["search"], function(callback, result) {
+		if (!callback) {
+			result = [];
+		}
 		res.render(VIEWS_DIR + "search.html", {session: getSessionStatus(req), searchResult: result, searchResultTotal: result.length});
 	});
 });
