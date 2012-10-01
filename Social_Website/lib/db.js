@@ -69,13 +69,14 @@ mongo_db.open(function(err, db) {
 						collection.findOne(
 							json_data,
 							function(err, docs) {
-								if (!err) {
+								if (docs != null && !err) {
 									ol.logger("Returned a user from getUser()", "db.js");
+
 									callback(true, docs);
 								}
 								else {
 									ol.logger("Error when fetching from getUser()", "db.js");
-									callback(false, {"nothing": true});
+									callback(false);
 								}
 							}
 						);
@@ -238,8 +239,7 @@ mongo_db.open(function(err, db) {
 						collection.find(
 							json_data
 						).toArray(function(err, docs) {
-							console.log(docs);
-							if (docs && docs.length > 0) {
+							if (docs != [] && docs.length > 0) {
 								ol.logger("Returning a user's wallposts", "db.js");
 								callback(true, docs);
 							}

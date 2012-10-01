@@ -27,7 +27,7 @@ inputElement.send_keys("asdasd");
 # Same as sleep, will have more of these that wont have any comments
 inputElement.submit()
 
-driver.get("http://127.0.0.1:3000/profile?userId=50658e6a9ecfe43b2e000001");
+driver.get("http://127.0.0.1:3000/profile?userId=50695df12de3c44404000001");
 
 inputElement = driver.find_element_by_name("wallpost");
 inputElement.send_keys("Hej du din fule!");

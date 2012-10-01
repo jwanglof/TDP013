@@ -26,6 +26,7 @@ User ID: {{ userInfo._id }}
 {% else %}
 ""
 {% endif %}
+{{ wallPosts }}
 {% for wallPost in wallPosts %}
 {{ wallPost.wallpost }} <br />
 {% endfor %}

@@ -54,14 +54,18 @@ var getSessionStatus = function(req, callback) {
 var getFriends = function(friends, callback) {
 	var friendsArray = new Array();
 
-	for (var i = 0; i < friends.length; i++) {
-		db.getUser({"_id": friends[i]}, function(callb, result) {
-			friendsArray.push(result);
+	if (friends != undefined) {
+		for (var i = 0; i < friends.length; i++) {
+			db.getUser({"_id": friends[i]}, function(callb, result) {
+				friendsArray.push(result);
 
-			if (i == friends.length)
-				callback(friendsArray);
-		});
+				if (i == friends.length)
+					callback(friendsArray);
+			});
+		}
 	}
+	else
+		callback();
 }
 
 var getWallPosts = function(userId, callback) {
@@ -69,11 +73,17 @@ var getWallPosts = function(userId, callback) {
 		//		callback(result);
 		// result[i]["from_id"] should get the users name from getUser()
 		// Add to an array and return
-		for (var i = 0; i < result.length; i++) {
-			console.log(i + " -- " + result[i]["from_id"]);
-		}
+		if (err) {
+			for (var i = 0; i < result.length; i++) {
+				var res_wallpost = result[i]["wallpost"];
 
-		callback(result);
+				db.getUser({_id: result[i]["from_id"]}, function(err, user_result) {
+					callback({wallpost: res_wallpost, from_user: user_result.firstname});
+				});
+			}
+		}
+		else
+			callback();
 	});
 }
 
@@ -104,6 +114,7 @@ app.get("/login", function(req, res) {
 
 app.post("/login/get", function(req, res) {
 	db.getUser(req.body, function(callback, result) {
+		console.log("--------" + result);
 		if (callback) {
 			req.session.userId = result._id;
 			req.session.save();
