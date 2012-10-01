@@ -41,7 +41,7 @@ app.configure("development", function() {
 });
 
 var getSessionStatus = function(req, callback) {
-	if (req.session.email)
+	if (req.session.userId)
 		var setSession = true;
 	else
 		var setSession = false;
@@ -52,8 +52,6 @@ var getSessionStatus = function(req, callback) {
 
 
 var getFriends = function(friends, callback) {
-	// loop through req (change name), for each id call db.getUser(JSON), add to an array and return the array
-	// Need to make this asynchronous!
 	var friendsArray = new Array();
 
 	for (var i = 0; i < friends.length; i++) {
@@ -97,7 +95,7 @@ app.post("/save", function(req, res) {
 app.get("/login", function(req, res) {
 	if (req.query.unsuccessful)
 		res.render(VIEWS_DIR + "login_unsuccessful.html", {session: getSessionStatus(req)});
-	else if (req.session.email)
+	else if (req.session.userId)
 		// When the server restarts the session dissapears. Duh...
 		res.redirect("/profile");
 	else
@@ -107,8 +105,6 @@ app.get("/login", function(req, res) {
 app.post("/login/get", function(req, res) {
 	db.getUser(req.body, function(callback, result) {
 		if (callback) {
-			req.session.firstname = result.firstname;
-			req.session.email = result.email;
 			req.session.userId = result._id;
 			req.session.save();
 			// This probably work but I can't get this data from /profile
@@ -137,7 +133,7 @@ app.get("/profile", function(req, res) {
 
 		db.getUser({_id: getId}, function(callback, result) {
 			getWallPosts(getId, function(returnedWallPosts) {
-				res.render(VIEWS_DIR + "profile.html", {session: getSessionStatus(req), userInfo: result, sessionEmail: req.session.email, wallPosts: returnedWallPosts});
+				res.render(VIEWS_DIR + "profile.html", {session: getSessionStatus(req), userInfo: result, wallPosts: returnedWallPosts});
 			});
 		});
 
