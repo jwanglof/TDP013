@@ -9,6 +9,7 @@ var VIEWS_DIR = __dirname + "/../views/";
 
 var db = require("./db");
 var ol = require("./helpers/output_logger");
+var wallposts = require("./functions/wallposts.js");
 
 swig.init({
 	root: VIEWS_DIR,
@@ -70,24 +71,6 @@ var getFriends = function(friends, callback) {
 var checkFriendship = function(user, friend, callback) {
 	db.checkFriendship({userId: user, friendId: friend}, function(good) {
 		callback(good);
-	});
-}
-
-var getWallPosts = function(userId, callback) {
-	var wallpostArray = new Array();
-	db.getWallText({to_id: userId}, function(good, result) {
-		if (good) {
-			for (var i = 0; i < result.length; i++) {
-				var res_wallpost = result[i]["wallpost"];
-
-				db.getUser({_id: result[i]["from_id"]}, function(err, user_result) {
-					wallpostArray.push({wallpost: res_wallpost, from_user: user_result.firstname, from_id: user_result._id});
-				});
-			}
-			callback(wallpostArray);
-		}
-		else
-			callback();
 	});
 }
 
@@ -157,7 +140,7 @@ app.get("/profile", function(req, res) {
 		}
 
 		db.getUser({_id: getId}, function(callback, result) {
-			getWallPosts(getId, function(returnedWallPosts) {
+			func.getwallposts(getId, function(returnedWallPosts) {
 				res.render(VIEWS_DIR + "profile.html", {session: getSessionStatus(req), userInfo: result, wallPosts: returnedWallPosts, userId: req.session.userId, friendship: friendship});
 			});
 		});

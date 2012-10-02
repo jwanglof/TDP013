@@ -3,14 +3,38 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 		<title>TDP013: Social website - {% block title %}{% endblock %}</title>
-		<link type="text/css" href="style/flick/jquery-ui-1.8.23.custom.css" rel="stylesheet" />
+		<link type="text/css" href="style/bootstrap.min.css" rel="stylesheet" />
 		<link type="text/css" href="style/screen.css" rel="stylesheet" />
-		<script type="text/javascript" src="javascript/jquery-1.7.2.min.js"></script>
-		<script type="text/javascript" src="javascript/jquery-ui-1.8.23.custom.min.js"></script>
+		<script type="text/javascript" src="javascript/jquery-1.8.2.min.js"></script>
 		<script type="text/javascript" src="javascript/jquery.validate.js"></script>
+		<script type="text/javascript" src="javascript/bootstrap.min.js"></script>
 		<script type="text/javascript" src="javascript/scripts.js"></script>
 	</head>
 	<body>
+
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span2">
+					<a href="/">Home</a>
+					<br />
+					{% if session %}
+					<a href="/profile">Profile</a>
+					<br />
+					<a href="/friends">Friends</a>
+					<br />
+					<a href="/logout">Logout</a>
+					{% else %}
+					<a href="/register">Register</a>
+					<br />
+					<a href="/login">Login</a>
+					{% endif %}
+				</div>
+				<div class="span10">
+					{% block center_content %}{% endblock %}
+				</div>
+			</div>
+		</div>
+<!--
 		<div id="container">
 			
 			<div id="topmenu">
@@ -34,6 +58,7 @@
 			</div>
 
 		</div>
+-->
 	</body>
 </html>
 
