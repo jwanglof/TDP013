@@ -139,7 +139,6 @@ mongo_db.open(function(err, db) {
 								"email": json_data
 							}
 						).toArray(function(err, docs) {
-							console.log(docs);
 							if (docs != [] && docs.length > 0) {
 								callback(true, docs);
 							}
@@ -262,7 +261,9 @@ mongo_db.open(function(err, db) {
 		 * getWallText()
 		 */
 		
-		
+		/*
+		 * checkFriendship()
+		 */
 		var checkFriendship = function(json_data, callback) {
 			ol.logger("checkFriendship() called", "db.js");
 			if (mongo_db._state == "connected") {
@@ -279,10 +280,14 @@ mongo_db.open(function(err, db) {
 								friends: {$in: [json_data["userId"], json_data["friendId"]]}
 							},
 							function(err, docs) {
-								if (docs)
+								if (docs) {
+									ol.logger("Returning  as friendship status", "db.js");
 									callback(true);
-								else
+								}
+								else {
+									ol.logger("Returning FALSE as friendship status", "db.js");
 									callback(false);
+								}
 							});
 					}
 				});
@@ -290,6 +295,9 @@ mongo_db.open(function(err, db) {
 			else
 				ol.logger("ERROR: The DB-connection is not open!", "db.js");
 		}
+		/*
+		 * checkFriendship()
+		 */
 
 
 	}

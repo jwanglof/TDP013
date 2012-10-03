@@ -32,10 +32,11 @@ inputElement.send_keys("test@user.com")
 inputElement.submit()"""
 
 #driver.get("http://127.0.0.1:3000/profile?userId=5069b2a1981634fe38000002");
+driver.get("http://127.0.0.1:3000/profile/id/5069b2a1981634fe38000002");
 
-inputElement = driver.find_element_by_name("wallpost");
+"""inputElement = driver.find_element_by_name("wallpost");
 inputElement.send_keys("Hej du din fule!");
-inputElement.submit()
+inputElement.submit()"""
 
 """
 time.sleep(1)

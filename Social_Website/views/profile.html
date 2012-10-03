@@ -32,7 +32,7 @@ Already buds
 {% for wallPost in wallPosts %}
 <div class="wallpost">
 {{ wallPost.wallpost }} <br />
-From: <a href="/profile?userId={{ wallPost.from_id }}">{{ wallPost.from_user }}</a>
+From: <a href="/profile/id/{{ wallPost.from_id }}">{{ wallPost.from_user }}</a>
 </div>
 {% endfor %}
 
