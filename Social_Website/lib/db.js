@@ -60,10 +60,11 @@ mongo_db.open(function(err, db) {
 		 */
 		var getUser = function(json_data, callback) {
 			ol.logger("getUser() called", "db.js");
+			console.log(json_data);
 			if (mongo_db._state == "connected") {
 				if (json_data["_id"])
 					json_data["_id"] = new mongodb.BSONPure.ObjectID.createFromHexString(json_data["_id"]);
-
+				
 				mongo_db.collection("users", function(err, collection) {
 					if (!err) {
 						collection.findOne(
@@ -101,14 +102,13 @@ mongo_db.open(function(err, db) {
 		var getUserFriends = function(json_data, callback) {
 			ol.logger("getUserFriends() called", "db.js");
 			if (mongo_db._state == "connected") {
-				var userId = new mongodb.BSONPure.ObjectID.createFromHexString(json_data);
+				if (json_data["_id"])
+					json_data["_id"] = new mongodb.BSONPure.ObjectID.createFromHexString(json_data["_id"]);
 
 				mongo_db.collection("users", function(err, collection) {
 					if (!err) {
 						collection.findOne(
-							{
-								_id: userId
-							},
+							json_data,
 							function(err, docs) {
 								if (!err) {
 									callback(true, docs["friends"]);
@@ -235,6 +235,7 @@ mongo_db.open(function(err, db) {
 		 */
 		var getWallText = function(json_data, callback) {
 			ol.logger("getWallText() called", "db.js");
+			console.log(json_data);
 			if (mongo_db._state == "connected") {
 				mongo_db.collection("wallposts", function(err, collection) {
 					if (!err) {
