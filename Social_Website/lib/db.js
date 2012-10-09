@@ -131,13 +131,12 @@ mongo_db.open(function(err, db) {
 		 */
 		var search = function(json_data, callback) {
 			ol.logger("search() called", "db.js");
+			console.log(json_data);
 			if (mongo_db._state == "connected") {
 				mongo_db.collection("users", function(err, collection) {
 					if (!err) {
 						collection.find(
-							{
-								"email": json_data
-							}
+							json_data
 						).toArray(function(err, docs) {
 							if (docs != [] && docs.length > 0) {
 								callback(true, docs);

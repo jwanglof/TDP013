@@ -57,7 +57,7 @@ function profile(res, req, postData) {
 		if (callback) {
 			// getWallText doesn't work. result._id is not a string. Works when it is a string!
 			db.getWallText({to_id: result._id}, function(callback, wallResult) {
-				console.log(wallResult);
+				//console.log(wallResult);
 				res.writeHead(200, get_headers(req));
 				res.write(JSON.stringify(result));
 				res.end();
@@ -74,11 +74,38 @@ function friends(res, req, postData) {
 	db.getUserFriends(postData, function(callback, result) {
 		if (callback) {
 			getFriends(result, function(friends) {
-				console.log(friends);
+				//console.log(friends);
 				res.writeHead(200, get_headers(req));
 				res.write(JSON.stringify(friends));
 				res.end();
 			});
+		}
+		else {
+			res.writeHead(500, get_headers(req));
+			res.end();
+		}
+	});
+}
+
+function search(res, req, postData) {
+	db.search(postData, function(callback, result) {
+		if (callback) {
+			res.writeHead(200, get_headers(req));
+			res.write(JSON.stringify(result));
+			res.end();
+		}
+		else {
+			res.writeHead(500, get_headers(req));
+			res.end();
+		}
+	});
+}
+
+function addFriend(res, req, postData) {
+	db.addUserFriend(postData, function(callback) {
+		if (callback) {
+			res.writeHead(200, get_headers(req));
+			res.end();
 		}
 		else {
 			res.writeHead(500, get_headers(req));
@@ -105,8 +132,11 @@ var getFriends = function(friends, callback) {
 }
 
 
+
 exports.start = start;
 exports.login = login;
 exports.register = register;
 exports.profile = profile;
 exports.friends = friends;
+exports.search = search;
+exports.addFriend = addFriend;
