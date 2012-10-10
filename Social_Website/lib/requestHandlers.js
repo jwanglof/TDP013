@@ -74,7 +74,6 @@ function friends(res, req, postData) {
 	db.getUserFriends(postData, function(callback, result) {
 		if (callback) {
 			getFriends(result, function(friends) {
-				//console.log(friends);
 				res.writeHead(200, get_headers(req));
 				res.write(JSON.stringify(friends));
 				res.end();

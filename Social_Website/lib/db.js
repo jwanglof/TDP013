@@ -165,16 +165,29 @@ mongo_db.open(function(err, db) {
 				
 				mongo_db.collection("users", function(err, collection) {
 					if (!err) {
-						// Add the friend to the user that requested the friendship
-						collection.update(
-							{
-								"_id": userId
-							},
-							{
-								$push: { "friends": json_data["friendId"] }
+						collection.findOne(
+							{ friends: json_data["friendId"] },
+							function(err, docs) {
+								if (!err) {
+									// Add the friend to the user that requested the friendship
+									collection.update(
+										{
+											"_id": userId
+										},
+										{
+											//$push: { "friends": json_data["friendId"] }
+											"$addToSet": { friends: json_data["friendId"] }
+										}
+									);
+
+								}
+								else {
+									console.log("Friend already exists");
+								}
 							}
 						);
 
+/*
 						// Add the user to the friend
 						collection.update(
 							{
@@ -184,7 +197,7 @@ mongo_db.open(function(err, db) {
 								$push: { "friends": json_data["_id"] }
 							}
 						);
-
+*/
 						callback(true);
 					 }
 				});
