@@ -14,7 +14,7 @@ var mongodb = require("mongodb");
 
 var ol = require("./helpers/output_logger");
 
-var mongo_server = new mongodb.Server("localhost", 27017, {auto_reconnect: true});
+var mongo_server = new mongodb.Server("localhost", 27017, {auto_reconnect: true, safe: false});
 var mongo_db = new mongodb.Db("tdp013project", mongo_server);
 
 // The DB-connection will always be open
@@ -58,9 +58,10 @@ mongo_db.open(function(err, db) {
 		/*
 		 * getUser
 		 */
+
 		var getUser = function(json_data, callback) {
 			ol.logger("getUser() called", "db.js");
-			console.log(json_data);
+			//console.log(json_data);
 			if (mongo_db._state == "connected") {
 				if (json_data["_id"])
 					json_data["_id"] = new mongodb.BSONPure.ObjectID.createFromHexString(json_data["_id"]);
@@ -110,8 +111,9 @@ mongo_db.open(function(err, db) {
 						collection.findOne(
 							json_data,
 							function(err, docs) {
+								//console.log(docs.friends);
 								if (!err) {
-									callback(true, docs["friends"]);
+									callback(true, docs.friends);
 								}
 							}
 						);
@@ -131,7 +133,7 @@ mongo_db.open(function(err, db) {
 		 */
 		var search = function(json_data, callback) {
 			ol.logger("search() called", "db.js");
-			console.log(json_data);
+			//console.log(json_data);
 			if (mongo_db._state == "connected") {
 				mongo_db.collection("users", function(err, collection) {
 					if (!err) {
@@ -247,7 +249,7 @@ mongo_db.open(function(err, db) {
 		 */
 		var getWallText = function(json_data, callback) {
 			ol.logger("getWallText() called", "db.js");
-			console.log(json_data);
+			//console.log(json_data);
 			if (mongo_db._state == "connected") {
 				mongo_db.collection("wallposts", function(err, collection) {
 					if (!err) {
