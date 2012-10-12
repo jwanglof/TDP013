@@ -73,32 +73,11 @@ function profile(res, req, postData) {
 function friends(res, req, postData) {
 	db.getUserFriends(postData, function(callback, result) {
 		if (callback) {
-			//console.log("ASDASD" + result);
-			//getFriends(result, function(friends) {
-				//console.log("DSADSA" + friends);
-/*				console.log(JSON.stringify(friends));
+			getFriends(result, function(friendsArray) {
 				res.writeHead(200, get_headers(req));
-				res.write(JSON.stringify(friends));
-				res.end();*/
-
-			//});
-			var friendsArray = new Array();
-
-			for (var i = 0; i < result.length; i++) {
-				db.getUser({_id: result[i]}, function(callb, result) {
-					console.log(result);
-					friendsArray.push(result);
-					//friendsArray[i] = result;
-					
-					if (i == friends.length-1) {
-						console.log("UUUU");
-						callback(friendsArray);
-					}
-				});
-				console.log(result.length + " {{{{{{{{ " + i);
-			}
-
-
+				res.write(JSON.stringify(friendsArray));
+				res.end();
+			});
 		}
 		else {
 			res.writeHead(500, get_headers(req));
@@ -134,32 +113,31 @@ function addFriend(res, req, postData) {
 	});
 }
 
-var getFriends = function(friends, callback) {
-	var friendsArray = new Array();
-	console.log(friends);
-	if (friends != undefined) {
-
-		for (var i = 0; i < friends.length; i++) {
-			db.getUser({_id: friends[i]}, function(callb, result) {
-				console.log(result);
-				friendsArray.push(result);
-				//friendsArray[i] = result;
-
-				if (i == friends.length-1) {
-					console.log("UUUU");
-					callback(JSON.stringify(friendsArray));
-				}
-			});
-			console.log(friends.length-1 + " {{{{{{{{ " + i);
-
-
+function checkFriendship(res, req, json_data) {
+	db.checkFriendship(json_data, function(callback) {
+		if (callback) {
+			res.writeHead(200, get_headers(req));
+			res.write(JSON.stringify(callback));
+			res.end();
 		}
-	}
-	else
-		callback();
+		else {
+			res.writeHead(500, get_headers(req));
+			res.end();			
+		}
+	});
 }
 
+var getFriends = function(friendIds, callback) {
+	var friendsArray = new Array();
 
+	friendIds.forEach(function(value, i, ar) {
+		db.getUser({_id: value}, function(callb, result) {
+			friendsArray.push(result);
+			if (friendsArray.length == friendIds.length)
+				callback(friendsArray);
+		});
+	});
+}
 
 exports.start = start;
 exports.login = login;
@@ -168,3 +146,4 @@ exports.profile = profile;
 exports.friends = friends;
 exports.search = search;
 exports.addFriend = addFriend;
+exports.checkFriendship = checkFriendship;
