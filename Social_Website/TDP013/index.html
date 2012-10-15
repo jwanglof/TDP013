@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<title>TDP013: Social website</title>
+		<link type="text/css" href="css/bootstrap.min.css" rel="stylesheet" />
+		<link type="text/css" href="css/screen.css" rel="stylesheet" />
+		<link type="text/css" href="css/style.bootstrap.css" rel="stylesheet" />
+		<script type="text/javascript" src="javascript/jquery-1.8.2.min.js"></script>
+		<script type="text/javascript" src="javascript/jquery.validate.js"></script>
+		<script type="text/javascript" src="javascript/bootstrap.min.js"></script>
+		<script type="text/javascript" src="javascript/scripts.js"></script>
+	</head>
+	<body>
+
+		<div class="navbar navbar-fixed-top">
+			<div class="navbar-inner" style="padding: 0px 20px;">
+				<a href="#" class="brand">Home</a>
+				<ul class="nav">
+					
+				</ul>
+				
+				<form method="post" action="#" class="navbar-form pull-right" id="loginForm">
+					<input type="text" name="liEmail" id="liEmail" class="span2" placeholder="E-mail" />
+					<input type="password" name="liPassword" id="liPassword" class="span2" placeholder="Password" />
+					<button type="submit" id="loginButton" class="btn">Login</button>
+				</form>
+
+			</div>
+		</div>
+
+		<br /><br /><br />
+
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span6">
+
+					<fieldset>
+						<legend>Register</legend>
+						<form method="post" action="#" class="jwform" id="registerForm">
+							<p>Each field is mandatory.</p>
+							<fieldset>
+								
+								<ol>
+									<li>
+										<label for="firstname">Firstname</label>
+										<input type="text" name="firstname" id="regFirstname" placeholder="Firstname" autofocus="autofocus" />
+									</li>
+									<li>
+										<label for="surname">Surname</label>
+										<input type="text" name="surname" id="regSurname" placeholder="Surname" />
+									</li>
+								</ol>
+							</fieldset>
+							<fieldset>
+								<ol>
+									<li>
+										<label for="email">E-mail</label>
+										<input type="text" name="email" id="regEmail" placeholder="E-mail" />
+									</li>
+									<p>
+										<li>
+											<label for="password">Password</label>
+											<input type="password" name="password" id="regPassword" placeholder="Password" />
+										</li>
+										<li>
+											<label for="password_repeat">Repeat password</label>
+											<input type="password" name="password_repeat" id="regPasswordRep" placeholder="Repeat password" />
+										</li>
+									</p>
+								</ol>
+							</fieldset>
+							<button type="submit" name="regBtn" class="btn">Register</button>
+						</form>
+					</fieldset>
+
+				</div>
+
+				<div class="span6" id="asdds">
+					Wilkommen osv osv
+				</div>
+
+			</div>
+		</div>
+
+	</body>
+</html>

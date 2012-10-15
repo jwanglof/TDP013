@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<title>TDP013: Social website</title>
+		<link type="text/css" href="css/bootstrap.min.css" rel="stylesheet" />
+		<link type="text/css" href="css/screen.css" rel="stylesheet" />
+		<link type="text/css" href="css/style.bootstrap.css" rel="stylesheet" />
+		<script type="text/javascript" src="javascript/jquery-1.8.2.min.js"></script>
+		<script type="text/javascript" src="javascript/jquery.validate.js"></script>
+		<script type="text/javascript" src="javascript/bootstrap.min.js"></script>
+		<script type="text/javascript" src="javascript/scripts.js"></script>
+	</head>
+	<body>
+
+		<div class="navbar navbar-fixed-top">
+			<div class="navbar-inner" style="padding: 0px 20px;">
+				<a href="#" class="brand" id="linkHome">Home</a>
+				<ul class="nav">
+					<li id="linkProfile"><a href="#">Profile</a></li>
+					<li id="linkFriends"><a href="#">Friends</a></li>
+					<li id="linkLogout"><a href="#">Log out</a></li>
+				</ul>
+
+						<form method="post" action="#" class="navbar-form pull-right" id="searchForm">
+							<input type="text" name="searchString" id="searchString" class="span5" placeholder="Search for a user (only e-mail!)..." />
+							<button type="submit" id="searchButton" class="btn">Search</button>
+						</form>
+
+			</div>
+		</div>
+
+		<br /><br /><br />
+
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span12" id="siteContent">
+				</div>
+			</div>
+		</div>
+
+	</body>
+</html>
