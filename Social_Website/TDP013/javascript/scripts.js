@@ -2,6 +2,7 @@ $(document).ready(function() {
 	$("#messages").hide();
 
 	$("#registerForm").validate({
+		errorLabelContainer: $("#messages"),
 		rules: {
 			firstname: "required",
 			surname: "required",
@@ -71,6 +72,7 @@ $(document).ready(function() {
 	});
 
 	$("#loginForm").validate({
+		errorLabelContainer: $("#messages"),
 		rules: {
 			liEmail: {
 				required: true,
@@ -82,7 +84,7 @@ $(document).ready(function() {
 			}
 		},
 		messages: {
-			liEmail: "",
+			liEmail: "Please enter a valid e-mail address",
 			liPassword: ""
 		},
 		submitHandler: function(form) {
