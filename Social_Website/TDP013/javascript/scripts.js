@@ -1,4 +1,6 @@
 $(document).ready(function() {
+	$("#messages").hide();
+
 	$("#registerForm").validate({
 		rules: {
 			firstname: "required",
@@ -39,13 +41,29 @@ $(document).ready(function() {
 			registerForm["password"] = $("#regPassword").val();
 			registerForm["passwordRep"] = $("#regPassworRep").val();
 
+
 			$.ajax({
 				url: "http://localhost:8888/register",
 				type: "POST",
 				dataType: "json",
 				data: registerForm,
-				success: function(result) {
-					alert(result);
+				statusCode: {
+					200: function() {
+						$("#regFirstname").val("");
+						$("#regSurname").val("");
+						$("#regEmail").val("");
+						$("#regPassword").val("");
+						$("#regPasswordRep").val("");
+						
+						$("#messages").addClass("alert-success");
+						$("#messages").text("You are now registered. Please sign in.");
+						$("#messages").show("fast");
+					},
+					500: function() {
+						$("#messages").addClass("alert-error");
+						$("#messages").text("You are NOT registered. Please try again.");
+						$("#messages").show("fast");
+					}
 				}
 			});
 			return false;
@@ -79,13 +97,14 @@ $(document).ready(function() {
 				data: loginForm,
 				statusCode: {
 					200: function(result) {
-						//alert(result._id);
 						sessionStorage._id = result._id;
 						form.submit();
 						window.location.replace("signed_in.html");
 					},
 					500: function() {
-						alert("Login failed. Try again plx.");
+						$("#messages").addClass("alert-error");
+						$("#messages").text("Login failed. Try again plx.");
+						$("#messages").show("fast");
 					}
 				}
 			});
@@ -150,7 +169,6 @@ $(document).ready(function() {
 
 	$("#linkLogout").click(function() {
 		sessionStorage.clear();
-		//window.location("/");
 		window.location.replace("index.html");
 	});
 
@@ -166,7 +184,6 @@ $(document).ready(function() {
 					$("#siteContent").text("");
 
 					$("<a/>", {
-						//href: "#" + result[0]._id,
 						text: result[0].firstname + " " + result[0].surname,
 						"class": "friend",
 						click: function() {
@@ -182,11 +199,6 @@ $(document).ready(function() {
 			}
 		});
 
-		return false;
-	});
-
-	$("#linkBefriend").click(function() {
-		alert("yuuu[");
 		return false;
 	});
 
@@ -214,6 +226,34 @@ function profilePage(userID) {
 						text: result.firstname + " " + result.surname
 					}).appendTo("#siteContent");
 
+					$("#siteContent").append("<textarea id=\"wallTextarea\" cols=\"5\" rows=\"5\"></textarea><button type=\"submit\" name=\"wallBtn\" id=\"wallBtn\" class=\"btn\">Write</button>");
+
+					$("#wallBtn").click(function() {
+						if ($("#wallTextarea").val()) {
+							$.ajax({
+								url: "http://localhost:8888/writeWall",
+								type: "POST",
+								dataType: "json",
+								data: {wallpost: $("#wallTextarea").val(), to_id: userID, from_id: sessionStorage._id},
+								statusCode: {
+									200: function() {
+										$("#messages").addClass("alert-success");
+										$("#messages").text("Wallpost posted.");
+										$("#messages").show("fast");
+									},
+									500: function() {
+										$("#messages").addClass("alert-error");
+										$("#messages").text("Wallpost NOT posted. Try again.");
+										$("#messages").show("fast");
+									}
+								}
+							});
+						}
+						else {
+							alert("You have to write something");
+						}
+					});
+
 					// Look if the user logged in and the profile being watch is friends
 					// If they are friends it till print 'Already friends'
 					// If they aren't it will print 'Be my friend?'
@@ -229,7 +269,9 @@ function profilePage(userID) {
 								text: "Be my friend?",
 								"style": "color: #0288CC; cursor: pointer;",
 								click: function() {
-									alert("You are now friends");
+									$("#messages").addClass("alert-success");
+									$("#messages").text("You are now friends.");
+									$("#messages").show("fast");
 
 									$.ajax({
 										url: "http://localhost:8888/addFriend",
@@ -245,39 +287,8 @@ function profilePage(userID) {
 					
 				}
 
-				$("#siteContent").append("Email: " + result.email + "<br />");
+				$("#siteContent").append("<br /> Email: " + result.email + "<br />");
 				$("#siteContent").append("ID: " + result._id + "<br />");
-
-				$("#siteContent").append("<textarea id=\"wallTextarea\" cols=\"5\" rows=\"5\"></textarea><button type=\"submit\" name=\"wallBtn\" id=\"wallBtn\" class=\"btn\">Write</button>");
-
-				$("#wallBtn").click(function() {
-					if ($("#wallTextarea").val()) {
-						$.ajax({
-							url: "http://localhost:8888/writeWall",
-							type: "POST",
-							dataType: "json",
-							data: {wallpost: $("#wallTextarea").val(), to_id: userID, from_id: sessionStorage._id},
-							statusCode: {
-								200: function() {
-									$("<p/>", {
-										text: v.from + " wrote " + v.wallpost,
-										"style": "color: #0288CC; cursor: pointer; margin-bottom: 0px",
-										click: function() {
-											profilePage(v._id);
-										}
-									}).appendTo("#siteContent");
-									alert("Wallpost posted");
-								},
-								500: function() {
-									alert("Nope");
-								}
-							}
-						});
-					}
-					else {
-						alert("You have to write something");
-					}
-				});
 
 				$.ajax({
 					url: "http://localhost:8888/getWall",
@@ -294,12 +305,6 @@ function profilePage(userID) {
 										profilePage(v._id);
 									}
 								}).appendTo("#siteContent");
-								
-								/*$("<p/>", {
-									text: v.walltext,
-									"style": "color: #000000"
-								}).appendTo("#siteContent");*/
-								
 							});
 						},
 						500: function() {
