@@ -15,7 +15,9 @@ var mongodb = require("mongodb");
 var ol = require("./helpers/output_logger");
 
 var mongo_server = new mongodb.Server("localhost", 27017, {auto_reconnect: true, safe: false});
-var mongo_db = new mongodb.Db("tdp013project", mongo_server);
+//var mongo_db = new mongodb.Db("tdp013project", mongo_server);
+// Use this DB for Mocha-tests!
+var mongo_db = new mongodb.Db("tdp013projectMocha", mongo_server);
 
 // The DB-connection will always be open
 mongo_db.open(function(err, db) {
@@ -30,7 +32,6 @@ mongo_db.open(function(err, db) {
 			if (mongo_db._state == "connected") {
 				mongo_db.collection("users", function(err, collection) {
 					collection.insert(
-						// Should replace this with own defined tables since I don't really need the password_repeat..
 						json_data,
 						{
 							safe: true
@@ -51,16 +52,12 @@ mongo_db.open(function(err, db) {
 			else
 				ol.logger("ERROR: The DB-connection is not open!", "db.js");
 		}
-		/*
-		 * registerUser
-		 */
 
 		/*
 		 * getUser
 		 */
 		var getUser = function(json_data, callback) {
 			ol.logger("getUser() called", "db.js");
-			//console.log(json_data);
 			if (mongo_db._state == "connected") {
 				if (json_data["_id"])
 					json_data["_id"] = new mongodb.BSONPure.ObjectID.createFromHexString(json_data["_id"]);
@@ -90,11 +87,6 @@ mongo_db.open(function(err, db) {
 			else
 				ol.logger("ERROR: The DB-connection is not open!", "db.js");
 		}
-		/*
-		 * getUser()
-		 */
-
-
 
 		/*
 		 * getUserFriends()
@@ -123,17 +115,12 @@ mongo_db.open(function(err, db) {
 			else
 				ol.logger("ERROR: The DB-connection is not open!", "db.js");
 		}
-		/*
-		 * getUserFriends()
-		 */
-		
 
 		/*
 		 * search()
 		 */
 		var search = function(json_data, callback) {
 			ol.logger("search() called", "db.js");
-			//console.log(json_data);
 			if (mongo_db._state == "connected") {
 				mongo_db.collection("users", function(err, collection) {
 					if (!err) {
@@ -152,9 +139,6 @@ mongo_db.open(function(err, db) {
 			else
 				ol.logger("ERROR: The DB-connection is not open!", "db.js");
 		}
-		/*
-		 * search()
-		 */
 
 		/*
 		 * addUserFriend()
@@ -177,7 +161,6 @@ mongo_db.open(function(err, db) {
 											"_id": userId
 										},
 										{
-											//$push: { "friends": json_data["friendId"] }
 											"$addToSet": { friends: json_data["friendId"] }
 										}
 									);
@@ -195,7 +178,6 @@ mongo_db.open(function(err, db) {
 								"_id": friendId
 							},
 							{
-								//$push: { "friends": json_data["_id"] }
 								"$addToSet": { friends: json_data["_id"] }
 							}
 						);
@@ -207,9 +189,6 @@ mongo_db.open(function(err, db) {
 			else
 				ol.logger("ERROR: The DB-connection is not open!", "db.js");
 		}
-		/*
-		 * addUserFriend()
-		 */
 
 		/*
 		 * addWallText()
@@ -239,10 +218,6 @@ mongo_db.open(function(err, db) {
 			else
 				ol.logger("ERROR: The DB-connection is not open!", "db.js");
 		}
-		/*
-		 * addWallText()
-		 */
-
 	
 		/*
 		 * getWallText()
@@ -271,10 +246,7 @@ mongo_db.open(function(err, db) {
 			else
 				ol.logger("ERROR: The DB-connection is not open!", "db.js");
 		}
-		/*
-		 * getWallText()
-		 */
-		
+
 		/*
 		 * checkFriendship()
 		 */
@@ -309,11 +281,6 @@ mongo_db.open(function(err, db) {
 			else
 				ol.logger("ERROR: The DB-connection is not open!", "db.js");
 		}
-		/*
-		 * checkFriendship()
-		 */
-
-
 	}
 	else
 		ol.logger("DB connection NOT OPEN", "db.js");

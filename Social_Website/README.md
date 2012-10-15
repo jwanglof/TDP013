@@ -20,8 +20,17 @@ Connect (comes with express)
 
 MongoDB
 ======
-	To flush a collection (in the terminal):
+	Flush a collection (in the terminal):
 		db.<collection>.remove({})
 
-	To remove a certain value:
+	Remove a certain value:
 		db.<collection>.remove({a: 1})
+	
+	Drop a DB from command line:
+		mongo <dbname> --eval "db.dropDatabase()"
+
+	Backup a DB:
+		mongodump -d <dbname> -o <to-folder-(default:dump)>
+
+	Restore from mongodump:
+		mongorestore -db <dbname> <folder-with-bson-files>
