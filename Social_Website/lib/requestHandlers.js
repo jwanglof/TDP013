@@ -134,18 +134,17 @@ function friends(res, req, postData) {
 
 function getWall(res, req, json_data) {
 	db.getWallText(json_data, function(callback, result) {
-		getWallposts(result, function(docs) {
-			if (callback) {
+		if (callback) {		
+			getWallposts(result, function(docs) {
 				res.writeHead(200, get_headers(req));
 				res.write(JSON.stringify(docs));
 				res.end();
-			}
-			else {
-				res.writeHead(500, get_headers(req));
-				res.end();
-			}
-		});
-
+			});
+		}					
+		else {
+			res.writeHead(500, get_headers(req));
+			res.end();
+		}
 	});
 }
 

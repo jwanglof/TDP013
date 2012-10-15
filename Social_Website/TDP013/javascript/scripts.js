@@ -247,7 +247,11 @@ function profilePage(userID) {
 				$("#siteContent").append("Email: " + result.email + "<br />");
 				$("#siteContent").append("ID: " + result._id + "<br />");
 
-				$("#siteContent").append("<textarea id=\"wallTextarea\" cols=\"5\" rows=\"5\"></textarea>");
+				$("#siteContent").append("<textarea id=\"wallTextarea\" cols=\"5\" rows=\"5\"></textarea><button type=\"submit\" name=\"wallBtn\" id=\"wallBtn\" class=\"btn\">Write</button>");
+
+				$("#wallBtn").click(function() {
+					
+				});
 
 				$.ajax({
 					url: "http://localhost:8888/getWall",
