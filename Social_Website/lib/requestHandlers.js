@@ -54,14 +54,17 @@ function register(res, req, postData) {
 
 function profile(res, req, postData) {
 	db.getUser(postData, function(callback, result) {
+		//console.log(result);
 		if (callback) {
+			//console.log(typeof(result._id)); // Output: object
 			// getWallText doesn't work. result._id is not a string. Works when it is a string!
-			db.getWallText({to_id: result._id}, function(callback, wallResult) {
+			//var bla = JSON.stringify(result._id);
+			//db.getWallText({to_id: result._id}, function(callback, wallResult) {
 				//console.log(wallResult);
 				res.writeHead(200, get_headers(req));
 				res.write(JSON.stringify(result));
 				res.end();
-			});
+			//});
 		}
 		else {
 			res.writeHead(500, get_headers(req));
@@ -70,21 +73,7 @@ function profile(res, req, postData) {
 	});
 }
 
-function friends(res, req, postData) {
-	db.getUserFriends(postData, function(callback, result) {
-		if (callback) {
-			getFriends(result, function(friendsArray) {
-				res.writeHead(200, get_headers(req));
-				res.write(JSON.stringify(friendsArray));
-				res.end();
-			});
-		}
-		else {
-			res.writeHead(500, get_headers(req));
-			res.end();
-		}
-	});
-}
+
 
 function search(res, req, postData) {
 	db.search(postData, function(callback, result) {
@@ -122,8 +111,41 @@ function checkFriendship(res, req, json_data) {
 		}
 		else {
 			res.writeHead(500, get_headers(req));
-			res.end();			
+			res.end();
 		}
+	});
+}
+
+function friends(res, req, postData) {
+	db.getUserFriends(postData, function(callback, result) {
+		if (callback) {
+			getFriends(result, function(friendsArray) {
+				res.writeHead(200, get_headers(req));
+				res.write(JSON.stringify(friendsArray));
+				res.end();
+			});
+		}
+		else {
+			res.writeHead(500, get_headers(req));
+			res.end();
+		}
+	});
+}
+
+function getWall(res, req, json_data) {
+	db.getWallText(json_data, function(callback, result) {
+		getWallposts(result, function(docs) {
+			if (callback) {
+				res.writeHead(200, get_headers(req));
+				res.write(JSON.stringify(docs));
+				res.end();
+			}
+			else {
+				res.writeHead(500, get_headers(req));
+				res.end();
+			}
+		});
+
 	});
 }
 
@@ -139,6 +161,20 @@ var getFriends = function(friendIds, callback) {
 	});
 }
 
+var getWallposts = function(wallPosts, callback) {
+	var wallArray = new Array();
+	
+	wallPosts.forEach(function(value, i, ar) {
+		//db.getUser({_id: value.to_id}, function(callb, res1) {
+			db.getUser({_id: value.from_id}, function(callb, res2) {
+				wallArray.push({_id: value.from_id, from: res2.firstname, wallpost: value.wallpost});
+				if (wallArray.length == wallPosts.length)
+					callback(wallArray);
+			});
+		//});
+	});
+}
+
 exports.start = start;
 exports.login = login;
 exports.register = register;
@@ -147,3 +183,4 @@ exports.friends = friends;
 exports.search = search;
 exports.addFriend = addFriend;
 exports.checkFriendship = checkFriendship;
+exports.getWall = getWall;

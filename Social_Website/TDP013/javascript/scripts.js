@@ -247,6 +247,7 @@ function profilePage(userID) {
 				$("#siteContent").append("Email: " + result.email + "<br />");
 				$("#siteContent").append("ID: " + result._id + "<br />");
 
+				$("#siteContent").append("<textarea id=\"wallTextarea\" cols=\"5\" rows=\"5\"></textarea>");
 
 				$.ajax({
 					url: "http://localhost:8888/getWall",
@@ -255,7 +256,21 @@ function profilePage(userID) {
 					data: {to_id: userID},
 					statusCode: {
 						200: function(result) {
-							alert("Japp");
+							$.each(result, function(k, v) {
+								$("<p/>", {
+									text: v.from + " wrote " + v.wallpost,
+									"style": "color: #0288CC; cursor: pointer; margin-bottom: 0px",
+									click: function() {
+										profilePage(v._id);
+									}
+								}).appendTo("#siteContent");
+								
+								/*$("<p/>", {
+									text: v.walltext,
+									"style": "color: #000000"
+								}).appendTo("#siteContent");*/
+								
+							});
 						},
 						500: function() {
 							alert("Nope");

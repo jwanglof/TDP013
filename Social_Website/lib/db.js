@@ -58,7 +58,6 @@ mongo_db.open(function(err, db) {
 		/*
 		 * getUser
 		 */
-
 		var getUser = function(json_data, callback) {
 			ol.logger("getUser() called", "db.js");
 			//console.log(json_data);
@@ -111,10 +110,11 @@ mongo_db.open(function(err, db) {
 						collection.findOne(
 							json_data,
 							function(err, docs) {
-								//console.log(docs.friends);
-								if (!err) {
+								if (docs.friends != undefined) {
 									callback(true, docs.friends);
 								}
+								else
+									callback(false);
 							}
 						);
 					}
@@ -189,17 +189,17 @@ mongo_db.open(function(err, db) {
 							}
 						);
 
-/*
 						// Add the user to the friend
 						collection.update(
 							{
 								"_id": friendId
 							},
 							{
-								$push: { "friends": json_data["_id"] }
+								//$push: { "friends": json_data["_id"] }
+								"$addToSet": { friends: json_data["_id"] }
 							}
 						);
-*/
+
 						callback(true);
 					 }
 				});
@@ -249,8 +249,8 @@ mongo_db.open(function(err, db) {
 		 */
 		var getWallText = function(json_data, callback) {
 			ol.logger("getWallText() called", "db.js");
-			//console.log(json_data);
 			if (mongo_db._state == "connected") {
+				var bla = new mongodb.BSONPure.ObjectID.createFromHexString(json_data["to_id"]);
 				mongo_db.collection("wallposts", function(err, collection) {
 					if (!err) {
 						collection.find(
@@ -258,7 +258,6 @@ mongo_db.open(function(err, db) {
 						).toArray(function(err, docs) {
 							if (docs != [] && docs.length > 0) {
 								ol.logger("Returning a user's wallposts", "db.js");
-								//callback(true, JSON.stringify(docs));
 								callback(true, docs);
 							}
 							else {

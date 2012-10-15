@@ -11,5 +11,6 @@ handle["/friends"] = requestHandlers.friends;
 handle["/search"] = requestHandlers.search;
 handle["/addFriend"] = requestHandlers.addFriend;
 handle["/checkFriendship"] = requestHandlers.checkFriendship;
+handle["/getWall"] = requestHandlers.getWall;
 
 server.startServer(router.route, handle);
