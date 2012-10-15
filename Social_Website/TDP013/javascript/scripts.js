@@ -87,7 +87,7 @@ $(document).ready(function() {
 						//alert(result._id);
 						sessionStorage._id = result._id;
 						form.submit();
-						window.location.replace("/~johan/TDP013/signed_in.html");
+						window.location.replace("signed_in.html");
 					},
 					500: function() {
 						alert("Login failed. Try again plx.");
