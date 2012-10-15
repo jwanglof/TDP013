@@ -125,7 +125,12 @@ $(document).ready(function() {
 					});
 				},
 				500: function() {
-					alert("NOOOOP");
+					$("#siteContent").text("");
+					
+					$("<p/>", {
+						text: "You ain't got no friends",
+						"style": "color: #0288CC"
+					}).appendTo("#siteContent");
 				}
 			}
 		});
@@ -168,7 +173,9 @@ $(document).ready(function() {
 					}).appendTo("#siteContent");
 				},
 				500: function() {
-					alert("Feeel");
+					$("<h4/>", {
+						text: "No users with that e-mail"
+					}).appendTo("#siteContent");
 				}
 			}
 		});
@@ -220,12 +227,15 @@ function profilePage(userID) {
 								text: "Be my friend?",
 								"style": "color: #0288CC; cursor: pointer;",
 								click: function() {
+									alert("You are now friends");
+
 									$.ajax({
 										url: "http://localhost:8888/addFriend",
 										type: "POST",
 										dataType: "json",
 										data: {_id: sessionStorage._id, friendId: result._id}
 									});
+									
 								}
 							}).appendTo("#siteContent");
 						}
