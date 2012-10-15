@@ -168,6 +168,7 @@ $(document).ready(function() {
 					$("<a/>", {
 						//href: "#" + result[0]._id,
 						text: result[0].firstname + " " + result[0].surname,
+						"class": "friend",
 						click: function() {
 							profilePage(result[0]._id);
 						}
@@ -250,7 +251,32 @@ function profilePage(userID) {
 				$("#siteContent").append("<textarea id=\"wallTextarea\" cols=\"5\" rows=\"5\"></textarea><button type=\"submit\" name=\"wallBtn\" id=\"wallBtn\" class=\"btn\">Write</button>");
 
 				$("#wallBtn").click(function() {
-					
+					if ($("#wallTextarea").val()) {
+						$.ajax({
+							url: "http://localhost:8888/writeWall",
+							type: "POST",
+							dataType: "json",
+							data: {wallpost: $("#wallTextarea").val(), to_id: userID, from_id: sessionStorage._id},
+							statusCode: {
+								200: function() {
+									$("<p/>", {
+										text: v.from + " wrote " + v.wallpost,
+										"style": "color: #0288CC; cursor: pointer; margin-bottom: 0px",
+										click: function() {
+											profilePage(v._id);
+										}
+									}).appendTo("#siteContent");
+									alert("Wallpost posted");
+								},
+								500: function() {
+									alert("Nope");
+								}
+							}
+						});
+					}
+					else {
+						alert("You have to write something");
+					}
 				});
 
 				$.ajax({
@@ -306,20 +332,4 @@ function befriend(userID, friendID, callback) {
 	});
 }
 
-/*function getWallposts(to_id, callback) {
-	$.ajax({
-		url: "http://localhost:8888/getWall",
-		type: "POST",
-		dataType: "json",
-		data: {to_id: userID},
-		statusCode: {
-			200: function(result) {
-				callback(true);
-			},
-			500: function() {
-				callback(false);
-			}
-		}
-	});		
-}*/
 
