@@ -1,9 +1,4 @@
 $(document).ready(function() {
-	$("#linkTest").click(function() {
-		window.location.href = "#HAHA";
-		return false;
-	});
-
 	$("#registerForm").validate({
 		rules: {
 			firstname: "required",
@@ -19,7 +14,7 @@ $(document).ready(function() {
 			password_repeat: {
 				required: true,
 				minlength: 5,
-				equalTo: "#password"
+				equalTo: "#regPassword"
 			}
 		},
 			messages: {
@@ -240,6 +235,18 @@ function profilePage(userID) {
 
 				$("#siteContent").append("Email: " + result.email + "<br />");
 				$("#siteContent").append("ID: " + result._id + "<br />");
+
+				$("<p/>", {
+					text: function() {
+						$.ajax({
+							url: "http://localhost:8888/getWallposts",
+							type: "POST",
+							dataType: "json",
+							data: {to_id: userID}
+						});
+					},
+					"style": "color: #c0c0c0"
+				}).appendTo("#siteContent");
 			},
 			500: function() {
 				// Put an error DIV in the middle of navbar
