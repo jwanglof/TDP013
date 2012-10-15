@@ -118,6 +118,7 @@ $(document).ready(function() {
 						$("<p/>", {
 							text: v.firstname + " " + v.surname,
 							"style": "color: #0288CC; cursor: pointer",
+							"class": "friend",
 							click: function() {
 								profilePage(v._id);
 							}
@@ -246,17 +247,21 @@ function profilePage(userID) {
 				$("#siteContent").append("Email: " + result.email + "<br />");
 				$("#siteContent").append("ID: " + result._id + "<br />");
 
-				$("<p/>", {
-					text: function() {
-						$.ajax({
-							url: "http://localhost:8888/getWallposts",
-							type: "POST",
-							dataType: "json",
-							data: {to_id: userID}
-						});
-					},
-					"style": "color: #c0c0c0"
-				}).appendTo("#siteContent");
+
+				$.ajax({
+					url: "http://localhost:8888/getWall",
+					type: "POST",
+					dataType: "json",
+					data: {to_id: userID},
+					statusCode: {
+						200: function(result) {
+							alert("Japp");
+						},
+						500: function() {
+							alert("Nope");
+						}
+					}
+				});		
 			},
 			500: function() {
 				// Put an error DIV in the middle of navbar
@@ -282,3 +287,21 @@ function befriend(userID, friendID, callback) {
 		}
 	});
 }
+
+/*function getWallposts(to_id, callback) {
+	$.ajax({
+		url: "http://localhost:8888/getWall",
+		type: "POST",
+		dataType: "json",
+		data: {to_id: userID},
+		statusCode: {
+			200: function(result) {
+				callback(true);
+			},
+			500: function() {
+				callback(false);
+			}
+		}
+	});		
+}*/
+
