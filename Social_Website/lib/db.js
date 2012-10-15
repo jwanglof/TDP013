@@ -294,7 +294,7 @@ mongo_db.open(function(err, db) {
 								friends: {$in: [json_data["userId"], json_data["friendId"]]}
 							},
 							function(err, docs) {
-								if (docs) {
+								if (docs != undefined) {
 									ol.logger("Returning  as friendship status", "db.js");
 									callback(true);
 								}

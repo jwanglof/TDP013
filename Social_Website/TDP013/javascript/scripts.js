@@ -277,7 +277,6 @@ function profilePage(userID) {
 							});
 						},
 						500: function() {
-							alert("Nope");
 						}
 					}
 				});		
