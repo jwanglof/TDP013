@@ -44,27 +44,21 @@ function register(res, req, postData) {
 	db.registerUser(postData, function(callback) {
 		if (callback) {
 			res.writeHead(200, get_headers(req));
-			res.write("1");
 			res.end();
 		}
-		else
-			console.log("NOOOOPE");
+		else {
+			res.writeHead(500, get_headers(req));
+			res.end();
+		}
 	});
 }
 
 function profile(res, req, postData) {
 	db.getUser(postData, function(callback, result) {
-		//console.log(result);
 		if (callback) {
-			//console.log(typeof(result._id)); // Output: object
-			// getWallText doesn't work. result._id is not a string. Works when it is a string!
-			//var bla = JSON.stringify(result._id);
-			//db.getWallText({to_id: result._id}, function(callback, wallResult) {
-				//console.log(wallResult);
-				res.writeHead(200, get_headers(req));
-				res.write(JSON.stringify(result));
-				res.end();
-			//});
+			res.writeHead(200, get_headers(req));
+			res.write(JSON.stringify(result));
+			res.end();
 		}
 		else {
 			res.writeHead(500, get_headers(req));
@@ -148,6 +142,19 @@ function getWall(res, req, json_data) {
 	});
 }
 
+function writeWall(res, req, json_data) {
+	db.addWallText(json_data, function(callback) {
+		if (callback) {
+			res.writeHead(200, get_headers(req));
+			res.end();
+		}					
+		else {
+			res.writeHead(500, get_headers(req));
+			res.end();
+	}
+	});
+}
+
 var getFriends = function(friendIds, callback) {
 	var friendsArray = new Array();
 
@@ -183,3 +190,4 @@ exports.search = search;
 exports.addFriend = addFriend;
 exports.checkFriendship = checkFriendship;
 exports.getWall = getWall;
+exports.writeWall = writeWall;
