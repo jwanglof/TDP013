@@ -150,7 +150,7 @@ $(document).ready(function() {
 	$("#linkLogout").click(function() {
 		sessionStorage.clear();
 		//window.location("/");
-		window.location.replace("/~johan/TDP013/index.html");
+		window.location.replace("index.html");
 	});
 
 	$("#searchButton").click(function() {
