@@ -1,5 +1,3 @@
-var mongodb = require("mongodb");
-
 /*
  * Output logger is a help tool that makes the outputs in the console better, and makes it easier to shut off the logging
  * Takes 2 arguments: What text to be shown, and which file the text originates from
@@ -7,10 +5,11 @@ var mongodb = require("mongodb");
 var ol = require("./helpers/output_logger");
 var filename = "db.js";
 
+var mongodb = require("mongodb");
 var mongo_server = new mongodb.Server("localhost", 27017, {auto_reconnect: true, safe: false});
-var mongo_db = new mongodb.Db("tdp013project", mongo_server);
+//var mongo_db = new mongodb.Db("tdp013project", mongo_server);
 // Use this DB for Mocha-tests!
-//var mongo_db = new mongodb.Db("tdp013projectMocha", mongo_server);
+var mongo_db = new mongodb.Db("tdp013projectMocha", mongo_server);
 
 /*
  *  The DB-connection will always be open
@@ -21,6 +20,7 @@ mongo_db.open(function(err, db) {
 
 		/*
 		 * registerUser
+		 * There can be several users with the same e-mail now. Perhaps fix this?
 		 */
 		var registerUser = function(json_data, callback) {
 			ol.logger("registerUser() called", filename);

@@ -114,15 +114,7 @@ $(document).ready(function() {
 	});
 
 	$("#linkProfile").click(function() {
-		var param = document.URL.split('#')[1];
-		var userID;
-
-		if (param.length === 24)
-			userID = param;
-		else
-			userID = sessionStorage._id;
-
-		profilePage(userID);
+		profilePage(sessionStorage._id);
 	});
 
 	$("#linkFriends").click(function() {
@@ -194,9 +186,9 @@ $(document).ready(function() {
 					}).appendTo("#siteContent");
 				},
 				500: function() {
-					$("<h4/>", {
-						text: "No users with that e-mail"
-					}).appendTo("#siteContent");
+					$("#messages").addClass("alert-error");
+					$("#messages").text("No user with that e-mail");
+					$("#messages").show("fast");
 				}
 			}
 		});
@@ -281,7 +273,6 @@ function profilePage(userID) {
 										dataType: "json",
 										data: {_id: sessionStorage._id, friendId: result._id}
 									});
-									
 								}
 							}).appendTo("#siteContent");
 						}
@@ -315,8 +306,9 @@ function profilePage(userID) {
 				});		
 			},
 			500: function() {
-				// Put an error DIV in the middle of navbar
-				alert("Wrong user ID");
+				$("#messages").addClass("alert-error");
+				$("#messages").text("Wrong user ID.");
+				$("#messages").show("fast");
 			}
 		}
 	});

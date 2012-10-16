@@ -93,9 +93,78 @@ describe("Server", function() {
 		});
 	});
 
+
+
+	/*
+	 * Test 200
+	 */
+	describe("Register a user", function() {
+		it("Should return 200", function(done) {
+			request.post(endpoint + "/register").type("form").send({firstname: "Test", surname: "User", email: "test@user.com", password: "asdasd", password_repeat: "asdasd"}).end(function(res) {
+				res.should.have.status(200);
+			});
+
+/*			request.post(endpoint + "/register").type("form").send({firstname: "Test2", surname: "User2", email: "test2@user2.com", password: "asdasd", password_repeat: "asdasd"}).end(function(res2) {
+				res2.should.have.status(200);
+			});*/
+
+			done();
+		});
+	});
+	
+	var newUserInfo = "";
+	describe("Log in a user", function() {
+		it("Should return 200", function(done) {
+			request.post(endpoint + "/login").type("form").send({email: "test@user.com", password: "asdasd"}).end(function(res) {
+				newUserInfo = res.body;
+				res.should.have.status(200);
+				done();
+			});
+		});
+	});
+
+	var newUserInfo2 = "";
+	describe("Log in a user2", function() {
+		it("Should return 200", function(done) {
+			request.post(endpoint + "/login").type("form").send({email: "test2@user2.com", password: "asdasd"}).end(function(res) {
+				newUserInfo2 = res.body;
+				res.should.have.status(200);
+				done();
+			});
+		});
+	});
+	
+	describe("Fetch a user's profile", function() {
+		console.log(newUserInfo);
+		it("Should return 200", function(done) {
+			request.post(endpoint + "/profile").type("form").send({_id: newUserInfo._id}).end(function(res) {
+				res.should.have.status(200);
+				done();
+			});
+		});
+	});
+
+	describe("Search for a user", function() {
+		it("Should return 200", function(done) {
+			request.post(endpoint + "/search").type("form").send({email: "test@user.com"}).end(function(res) {
+				res.should.have.status(200);
+				done();
+			});
+		});
+	});
+
+	describe("Add a new friend", function() {
+		it("Should return 200", function(done) {
+			request.post(endpoint + "/addFriend").type("form").send({userId: newUserInfo._id, friendId: newUserInfo2._id}).end(function(res) {
+				res.should.have.status(200);
+				done();
+			});
+		});
+	});
+
 	/*
 	 * Test 404
-	 */
+	 *
 	describe("Show an 404 error", function() {
 		it("Should return a 404 error since the page doesn't exist", function(done) {
 			request(endpoint + "/unknownPage").end(function(res) {
@@ -105,14 +174,20 @@ describe("Server", function() {
 		});
 	});
 
-	describe("Log in a user", function() {
+
+/*
+	describe("See a profile", function() {
 		it("Should return 200", function(done) {
-			request.post(endpoint + "/login").send({email: "jwanglof@gmail.com", password: "asdasd"}).end(function(res) {
+			request.post(endpoint + "/profile").type("form").send({_id: "test@user.com"}).end(function(res) {
 				res.should.have.status(200);
 				done();
 			});
 		});
 	});
+
+	
+	
+
 
 /*	describe("Get 400 Bad Request from /save", function() {
 		it("should return a 400 error since the user hasn't specified ?text=", function(done) {
@@ -138,4 +213,5 @@ describe("Server", function() {
 	 * Test 404 Not Found
 
 	 */
+
 });
