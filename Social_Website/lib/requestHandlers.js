@@ -25,7 +25,7 @@ function get_headers(request) {
 function login(res, req, json_data) {
 	ol.logger("Request handler LOGIN was called.", "requestHandlers.js");
 
-	if (json_data.length > 0) {
+	if (json_data.email) {
 		db.getUser(json_data, function(callback, result) {
 			if (callback) {
 				ol.logger("A user logged in", "requestHandlers.js");
@@ -50,7 +50,7 @@ function login(res, req, json_data) {
 function register(res, req, json_data) {
 	ol.logger("Request handler REGISTER was called.", "requestHandlers.js");
 
-	if (json_data.length > 0) {
+	if (json_data.email) {
 		db.registerUser(json_data, function(callback) {
 			if (callback) {
 				ol.logger("A user registered", "requestHandlers.js");
@@ -74,7 +74,7 @@ function register(res, req, json_data) {
 function profile(res, req, json_data) {
 	ol.logger("Request handler PROFILE was called.", "requestHandlers.js");
 
-	if (json_data.length > 0) {
+	if (json_data._id) {
 		db.getUser(json_data, function(callback, result) {
 			if (callback) {
 				ol.logger("Retrieved a profile", "requestHandlers.js");
@@ -99,7 +99,7 @@ function profile(res, req, json_data) {
 function search(res, req, json_data) {
 	ol.logger("Request handler SEARCH was called.", "requestHandlers.js");
 
-	if (json_data.length > 0) {
+	if (json_data.email) {
 		db.search(json_data, function(callback, result) {
 			if (callback) {
 				ol.logger("Retrieved users from a search", "requestHandlers.js");
@@ -124,7 +124,7 @@ function search(res, req, json_data) {
 function addFriend(res, req, json_data) {
 	ol.logger("Request handler ADDFRIEND was called.", "requestHandlers.js");
 
-	if (json_data.length > 0) {
+	if (json_data._id) {
 		db.addUserFriend(json_data, function(callback) {
 			if (callback) {
 				ol.logger("A new beautiful friendship has been made. B-e-a-utiful!", "requestHandlers.js");
@@ -148,7 +148,7 @@ function addFriend(res, req, json_data) {
 function checkFriendship(res, req, json_data) {
 	ol.logger("Request handler CHECKFRIENDSHIP was called.", "requestHandlers.js");
 
-	if (json_data.length > 0) {
+	if (json_data.userId) {
 		db.checkFriendship(json_data, function(callback) {
 			if (callback) {
 				ol.logger("Retrieved a friendship", "requestHandlers.js");
@@ -173,7 +173,7 @@ function checkFriendship(res, req, json_data) {
 function friends(res, req, json_data) {
 	ol.logger("Request handler FRIENDS was called.", "requestHandlers.js");
 
-	if (json_data.length > 0) {
+	if (json_data._id) {
 		db.getUserFriends(json_data, function(callback, result) {
 			if (callback) {
 				getFriends(result, function(friendsArray) {
@@ -200,7 +200,7 @@ function friends(res, req, json_data) {
 function getWall(res, req, json_data) {
 	ol.logger("Request handler GETWALL was called.", "requestHandlers.js");
 
-	if (json_data.length > 0) {
+	if (json_data.to_id) {
 		db.getWallText(json_data, function(callback, result) {
 			if (callback) {		
 				getWallposts(result, function(docs) {
@@ -227,7 +227,7 @@ function getWall(res, req, json_data) {
 function writeWall(res, req, json_data) {
 	ol.logger("Request handler WRITEWALL was called.", "requestHandlers.js");
 
-	if (json_data.length > 0) {
+	if (json_data.wallpost) {
 		db.addWallText(json_data, function(callback) {
 			if (callback) {
 				ol.logger("Wrote on a wall", "requestHandlers.js");
