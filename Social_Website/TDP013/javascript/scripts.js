@@ -262,6 +262,7 @@ function profilePage(userID) {
 							$("<p/>", {
 								text: "Be my friend?",
 								"style": "color: #0288CC; cursor: pointer;",
+								"class": "beFriend",
 								click: function() {
 									$("#messages").addClass("alert-success");
 									$("#messages").text("You are now friends.");
