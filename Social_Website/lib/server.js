@@ -16,6 +16,8 @@ var serverPort = 8888;
  * Add the chunks to postData so it will come as one piece
  */
 function getPost(req, callback) {
+	ol.logger("Found POST-data", filename);
+
 	var postData = "";
 
 	req.on("data", function(postDataChunk) {

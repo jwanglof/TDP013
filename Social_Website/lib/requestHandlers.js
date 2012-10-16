@@ -11,6 +11,36 @@ var ol = require("./helpers/output_logger");
 var filename = "requestHandlers.js";
 
 /*
+ * Handle registrations
+ * Writes only a 200 OK to the client side
+ * If the registration fails it will write a 500 error to the client side which will display an error
+ * If no data is available it will return a 400 error
+ */
+function register(res, req, json_data) {
+	ol.logger("Request handler REGISTER was called.", filename);
+
+	if (json_data.email) {
+		db.registerUser(json_data, function(callback) {
+			if (callback) {
+				ol.logger("A user registered", filename);
+				res.writeHead(200, get_headers(req));
+				res.end();
+			}
+			else {
+				ol.logger("ERROR: A user failed to register", filename);
+				res.writeHead(500, get_headers(req));
+				res.end();
+			}
+		});
+	}
+	else {
+		ol.logger("ERROR: Could not register. No data available.", filename);
+		res.writeHead(400, get_headers(req));
+		res.end();
+	}
+}
+
+/*
  * Handle log ins
  * Writes a JSON-object to the client side
  * If log in fails it will write a 500 error to the client side which will display an error
@@ -36,36 +66,6 @@ function login(res, req, json_data) {
 	}
 	else {
 		ol.logger("ERROR: Could not sign in a user. No data available.", filename);
-		res.writeHead(400, get_headers(req));
-		res.end();
-	}
-}
-
-/*
- * Handle registrations
- * Writes only a 200 OK to the client side
- * If the registration fails it will write a 500 error to the client side which will display an error
- * If no data is available it will return a 400 error
- */
-function register(res, req, json_data) {
-	ol.logger("Request handler REGISTER was called.", filename);
-
-	if (json_data.email) {
-		db.registerUser(json_data, function(callback) {
-			if (callback) {
-				ol.logger("A user registered", filename);
-				res.writeHead(200, get_headers(req));
-				res.end();
-			}
-			else {
-				ol.logger("ERROR: A user failed to register", filename);
-				res.writeHead(500, get_headers(req));
-				res.end();
-			}
-		});
-	}
-	else {
-		ol.logger("ERROR: Could not register. No data available.", filename);
 		res.writeHead(400, get_headers(req));
 		res.end();
 	}
@@ -228,6 +228,36 @@ function friends(res, req, json_data) {
 }
 
 /*
+ * Handle when a user writes to another user
+ * Writes only a 200 OK to the client side
+ * If it fails to write to a user it will write a 500 error to the client side which will display an error
+ * If no data is available it will return a 400 error
+ */
+function writeWall(res, req, json_data) {
+	ol.logger("Request handler WRITEWALL was called.", filename);
+
+	if (json_data.wallpost) {
+		db.addWallText(json_data, function(callback) {
+			if (callback) {
+				ol.logger("Wrote on a wall", filename);
+				res.writeHead(200, get_headers(req));
+				res.end();
+			}
+			else {
+				ol.logger("ERROR: Could not write on a wall", filename);
+				res.writeHead(500, get_headers(req));
+				res.end();
+			}
+		});
+	}
+	else {
+		ol.logger("ERROR: Could not write on a user's wall. No data available.", filename);
+		res.writeHead(400, get_headers(req));
+		res.end();
+	}
+}
+
+/*
  * Handle a user's wallposts
  * Writes an array with JSON-objects in it
  * If the user doesn't have any wallposts it will return a 500 error. Perhaps not the best error to write.
@@ -255,36 +285,6 @@ function getWall(res, req, json_data) {
 	}
 	else {
 		ol.logger("ERROR: Could not get a user's wallposts. No data available.", filename);
-		res.writeHead(400, get_headers(req));
-		res.end();
-	}
-}
-
-/*
- * Handle when a user writes to another user
- * Writes only a 200 OK to the client side
- * If it fails to write to a user it will write a 500 error to the client side which will display an error
- * If no data is available it will return a 400 error
- */
-function writeWall(res, req, json_data) {
-	ol.logger("Request handler WRITEWALL was called.", filename);
-
-	if (json_data.wallpost) {
-		db.addWallText(json_data, function(callback) {
-			if (callback) {
-				ol.logger("Wrote on a wall", filename);
-				res.writeHead(200, get_headers(req));
-				res.end();
-			}
-			else {
-				ol.logger("ERROR: Could not write on a wall", filename);
-				res.writeHead(500, get_headers(req));
-				res.end();
-			}
-		});
-	}
-	else {
-		ol.logger("ERROR: Could not write on a user's wall. No data available.", filename);
 		res.writeHead(400, get_headers(req));
 		res.end();
 	}

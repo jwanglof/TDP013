@@ -102,22 +102,34 @@ describe("Server", function() {
 		it("Should return 200", function(done) {
 			request.post(endpoint + "/register").type("form").send({firstname: "Test", surname: "User", email: "test@user.com", password: "asdasd", password_repeat: "asdasd"}).end(function(res) {
 				res.should.have.status(200);
+				done();
 			});
-
-/*			request.post(endpoint + "/register").type("form").send({firstname: "Test2", surname: "User2", email: "test2@user2.com", password: "asdasd", password_repeat: "asdasd"}).end(function(res2) {
-				res2.should.have.status(200);
-			});*/
-
-			done();
 		});
 	});
-	
+
+	describe("Register a user", function() {
+		it("Should return 200", function(done) {			
+			request.post(endpoint + "/register").type("form").send({firstname: "Test2", surname: "User2", email: "test2@user2.com", password: "asdasd", password_repeat: "asdasd"}).end(function(res2) {
+				res2.should.have.status(200);
+				done();
+			});
+		});
+	});	
+
 	var newUserInfo = "";
 	describe("Log in a user", function() {
-		it("Should return 200", function(done) {
+		it("Should return 200 and write the information", function(done) {
 			request.post(endpoint + "/login").type("form").send({email: "test@user.com", password: "asdasd"}).end(function(res) {
 				newUserInfo = res.body;
+
 				res.should.have.status(200);
+
+				res.body.email.should.equal("test@user.com");
+				res.body.firstname.should.equal("Test");
+				res.body.surname.should.equal("User");
+				res.body.password.should.equal("asdasd");
+				res.body.password_repeat.should.equal("asdasd");
+
 				done();
 			});
 		});
@@ -125,10 +137,18 @@ describe("Server", function() {
 
 	var newUserInfo2 = "";
 	describe("Log in a user2", function() {
-		it("Should return 200", function(done) {
+		it("Should return 200 and write the information", function(done) {
 			request.post(endpoint + "/login").type("form").send({email: "test2@user2.com", password: "asdasd"}).end(function(res) {
 				newUserInfo2 = res.body;
+
 				res.should.have.status(200);
+
+				res.body.email.should.equal("test2@user2.com");
+				res.body.firstname.should.equal("Test2");
+				res.body.surname.should.equal("User2");
+				res.body.password.should.equal("asdasd");
+				res.body.password_repeat.should.equal("asdasd");
+
 				done();
 			});
 		});
@@ -139,6 +159,13 @@ describe("Server", function() {
 		it("Should return 200", function(done) {
 			request.post(endpoint + "/profile").type("form").send({_id: newUserInfo._id}).end(function(res) {
 				res.should.have.status(200);
+
+				res.body.email.should.equal("test@user.com");
+				res.body.firstname.should.equal("Test");
+				res.body.surname.should.equal("User");
+				res.body.password.should.equal("asdasd");
+				res.body.password_repeat.should.equal("asdasd");
+
 				done();
 			});
 		});
@@ -148,6 +175,11 @@ describe("Server", function() {
 		it("Should return 200", function(done) {
 			request.post(endpoint + "/search").type("form").send({email: "test@user.com"}).end(function(res) {
 				res.should.have.status(200);
+
+				res.body[0].email.should.equal("test@user.com");
+				res.body[0].firstname.should.equal("Test");
+				res.body[0].surname.should.equal("User");
+
 				done();
 			});
 		});
@@ -155,7 +187,61 @@ describe("Server", function() {
 
 	describe("Add a new friend", function() {
 		it("Should return 200", function(done) {
-			request.post(endpoint + "/addFriend").type("form").send({userId: newUserInfo._id, friendId: newUserInfo2._id}).end(function(res) {
+			request.post(endpoint + "/addFriend").type("form").send({_id: newUserInfo._id, friendId: newUserInfo2._id}).end(function(res) {
+				res.should.have.status(200);
+				done();
+			});
+		});
+	});
+
+	describe("Check if two users are friends", function() {
+		it("Should return 200", function(done) {
+			request.post(endpoint + "/checkFriendship").type("form").send({userId: newUserInfo._id, friendId: newUserInfo2._id}).end(function(res) {
+				res.should.have.status(200);
+				done();
+			});
+		});
+	});
+
+	describe("Check if two users are friends", function() {
+		it("Should return 200", function(done) {
+			request.post(endpoint + "/checkFriendship").type("form").send({userId: newUserInfo._id, friendId: newUserInfo2._id}).end(function(res) {
+				res.should.have.status(200);
+				done();
+			});
+		});
+	});
+
+	describe("Check if two users are friends", function() {
+		it("Should return 200", function(done) {
+			request.post(endpoint + "/checkFriendship").type("form").send({userId: newUserInfo._id, friendId: newUserInfo2._id}).end(function(res) {
+				res.should.have.status(200);
+				done();
+			});
+		});
+	});
+
+	describe("Return a user's friends in an array", function() {
+		it("Should return 200", function(done) {
+			request.post(endpoint + "/friends").type("form").send({_id: newUserInfo._id}).end(function(res) {
+				res.should.have.status(200);
+				done();
+			});
+		});
+	});
+
+	describe("Return a user's friends in an array", function() {
+		it("Should return 200", function(done) {
+			request.post(endpoint + "/writeWall").type("form").send({wallpost: "En liten wallpost", to_id: newUserInfo._id, from_id: newUserInfo2._id}).end(function(res) {
+				res.should.have.status(200);
+				done();
+			});
+		});
+	});
+
+	describe("Return a user's friends in an array", function() {
+		it("Should return 200", function(done) {
+			request.post(endpoint + "/getWall").type("form").send({to_id: newUserInfo._id}).end(function(res) {
 				res.should.have.status(200);
 				done();
 			});
@@ -164,7 +250,7 @@ describe("Server", function() {
 
 	/*
 	 * Test 404
-	 *
+	 */
 	describe("Show an 404 error", function() {
 		it("Should return a 404 error since the page doesn't exist", function(done) {
 			request(endpoint + "/unknownPage").end(function(res) {
@@ -173,45 +259,5 @@ describe("Server", function() {
 			});
 		});
 	});
-
-
-/*
-	describe("See a profile", function() {
-		it("Should return 200", function(done) {
-			request.post(endpoint + "/profile").type("form").send({_id: "test@user.com"}).end(function(res) {
-				res.should.have.status(200);
-				done();
-			});
-		});
-	});
-
-	
-	
-
-
-/*	describe("Get 400 Bad Request from /save", function() {
-		it("should return a 400 error since the user hasn't specified ?text=", function(done) {
-			request(endpoint + "/save").end(function(res) {
-				res.should.have.status(400);
-				res.text.should.equal("400 Bad Request <br />You have to send a text to be inserted into the DB. <br />I.e. save?text=Someawesometextstring");
-				done();
-			});
-		});
-	});
-
-	describe("POST", function() {
-		it("should return a 405 error", function(done) {
-			request.post(endpoint + "/getall").send( {test: "test"}).end(function(res) {
-				res.should.have.status(405);
-				done();
-			});
-		});
-	});
-
-
-
-	 * Test 404 Not Found
-
-	 */
 
 });
