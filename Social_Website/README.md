@@ -1,6 +1,6 @@
 Node.js 
 ======
-	Reqs:
+	OLD! Reqs:
 		swig
 		express
 		mongodb
@@ -8,6 +8,12 @@ Node.js
 
 	Good to have:
 		supervisor (-g and sudo needed!)
+
+	Reqs:
+		mongodb
+		mocha
+		should
+		superagent
 
 Supervisor
 ======
