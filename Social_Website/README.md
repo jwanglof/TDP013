@@ -40,3 +40,19 @@ MongoDB
 
 	Restore from mongodump:
 		mongorestore -db <dbname> <folder-with-bson-files>
+
+JSCoverage
+======
+jscoverage --no-highlight lib/ lib-coverage/
+
+Mocha Test
+======
+Output in console:
+./node_modules/.bin/mocha -R list
+
+JSCoverage:
+./node_modules/.bin/mocha -R html-cov > coverage.html
+
+Selenium Test
+======
+python <selenium_test_file>.py
