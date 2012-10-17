@@ -1,6 +1,10 @@
 $(document).ready(function() {
+	// #message is where all alerts are shown
 	$("#messages").hide();
 
+	/*
+	 * Use JQuery's validate-plugin for easier validation checks
+	 */
 	$("#registerForm").validate({
 		errorLabelContainer: $("#messages"),
 		rules: {
@@ -35,13 +39,13 @@ $(document).ready(function() {
 				}
 			},
 		submitHandler: function(form) {
+			// Add everything to a JSON-object
 			var registerForm = {};
 			registerForm["firstname"] = $("#regFirstname").val();
 			registerForm["surname"] = $("#regSurname").val();
 			registerForm["email"] = $("#regEmail").val();
 			registerForm["password"] = $("#regPassword").val();
 			registerForm["passwordRep"] = $("#regPassworRep").val();
-
 
 			$.ajax({
 				url: "http://localhost:8888/register",
@@ -50,23 +54,27 @@ $(document).ready(function() {
 				data: registerForm,
 				statusCode: {
 					200: function() {
+						// Resets the input-fields
 						$("#regFirstname").val("");
 						$("#regSurname").val("");
 						$("#regEmail").val("");
 						$("#regPassword").val("");
 						$("#regPasswordRep").val("");
 						
+						// Add text to #message
 						$("#messages").addClass("alert-success");
 						$("#messages").text("You are now registered. Please sign in.");
 						$("#messages").show("fast");
 					},
 					500: function() {
+						// Add an error-text to #message
 						$("#messages").addClass("alert-error");
 						$("#messages").text("You are NOT registered. Please try again.");
 						$("#messages").show("fast");
 					}
 				}
 			});
+
 			return false;
 		}
 	});
@@ -88,6 +96,7 @@ $(document).ready(function() {
 			liPassword: ""
 		},
 		submitHandler: function(form) {
+			// Add everything to a JSON-object
 			var loginForm = {};
 			loginForm["email"] = $("#liEmail").val();
 			loginForm["password"] = $("#liPassword").val();
@@ -99,11 +108,17 @@ $(document).ready(function() {
 				data: loginForm,
 				statusCode: {
 					200: function(result) {
+						/*
+						 * Store the user's ID in a HTML5 session
+						 * Submit the form
+						 * Redirect the user to the 'user'-page
+						 */
 						sessionStorage._id = result._id;
 						form.submit();
 						window.location.replace("signed_in.html");
 					},
 					500: function() {
+						// Add an error-text to #message
 						$("#messages").addClass("alert-error");
 						$("#messages").text("Login failed. Try again plx.");
 						$("#messages").show("fast");
@@ -125,6 +140,12 @@ $(document).ready(function() {
 			data: sessionStorage,
 			statusCode: {
 				200: function(result) {
+					/*
+					 * Empty #siteContent
+					 * Loop through result to get key (k) and value (v)
+					 * Value contains the JSON-objects
+					 * Appends all the friends to #siteContent as a p-element that acts like a hyperlink
+					 */
 					$("#siteContent").text("");
 					
 					$.each(result, function(k, v) {
@@ -162,6 +183,10 @@ $(document).ready(function() {
 	});
 
 	$("#linkLogout").click(function() {
+		/*
+		 * Remove all sessions that are stored
+		 * Redirects the user to index
+		 */
 		sessionStorage.clear();
 		window.location.replace("index.html");
 	});
@@ -174,11 +199,17 @@ $(document).ready(function() {
 			data: { email: $("#searchString").val() },
 			statusCode: {
 				200: function(result) {
+					/*
+					 * Empty #searchString and #siteContent
+					 * It will only return one user since it's only e-mails so a loop isn't necessary
+					 * Append the search result to #siteContent as a p-element that acts like a hyperlink
+					 */
 					$("#searchString").val("");
 					$("#siteContent").text("");
 
-					$("<a/>", {
+					$("<p/>", {
 						text: result[0].firstname + " " + result[0].surname,
+						"style": "color: #0288CC; cursor: pointer",
 						"class": "friend",
 						click: function() {
 							profilePage(result[0]._id);
@@ -186,6 +217,7 @@ $(document).ready(function() {
 					}).appendTo("#siteContent");
 				},
 				500: function() {
+					$("#siteContent").text("");
 					$("#messages").addClass("alert-error");
 					$("#messages").text("No user with that e-mail");
 					$("#messages").show("fast");
@@ -208,20 +240,25 @@ function profilePage(userID) {
 			200: function(result) {
 				$("#siteContent").text("");
 
+				/*
+				 * Check if the user want to see the user's profile or another user's
+				 */
 				if (userID == sessionStorage._id) {
 					$("<h4/>", {
 						text: "Welcome back, " + result.firstname
 					}).appendTo("#siteContent");
 					$("#siteContent").append("Full name: " + result.firstname + " " + result.surname + "<br />");
 				}
-
 				else {
 					$("<h4/>", {
 						text: result.firstname + " " + result.surname
 					}).appendTo("#siteContent");
 
+					/*
+					 * Appends a textarea to the profile for the wallposts
+					 * Add a click-function to the button and adds the wallpost to the user
+					 */
 					$("#siteContent").append("<textarea id=\"wallTextarea\" cols=\"5\" rows=\"5\"></textarea><button type=\"submit\" name=\"wallBtn\" id=\"wallBtn\" class=\"btn\">Write</button>");
-
 					$("#wallBtn").click(function() {
 						if ($("#wallTextarea").val()) {
 							$.ajax({
@@ -244,13 +281,17 @@ function profilePage(userID) {
 							});
 						}
 						else {
-							alert("You have to write something");
+							$("#messages").addClass("alert-error");
+							$("#messages").text("You have to write something");
+							$("#messages").show("fast");
 						}
 					});
 
-					// Look if the user logged in and the profile being watch is friends
-					// If they are friends it till print 'Already friends'
-					// If they aren't it will print 'Be my friend?'
+					/*
+					 * Look if the user logged in and the profile being watch are friends
+					 * If they are friends it till print 'Already friends'
+					 * If they aren't it will print 'Be my friend?'
+					 */
 					befriend(sessionStorage._id, result._id, function(res) {
 						if (res) {
 							$("<p/>", {
@@ -278,7 +319,6 @@ function profilePage(userID) {
 							}).appendTo("#siteContent");
 						}
 					});
-					
 				}
 
 				$("#siteContent").append("<br /> Email: " + result.email + "<br />");
@@ -302,6 +342,9 @@ function profilePage(userID) {
 							});
 						},
 						500: function() {
+							$("#messages").addClass("alert-error");
+							$("#messages").text("Could not get the wallposts.");
+							$("#messages").show("fast");
 						}
 					}
 				});		
@@ -315,6 +358,9 @@ function profilePage(userID) {
 	});
 }
 
+/*
+ * Returns true or false depending if the users are friends or not
+ */
 function befriend(userID, friendID, callback) {
 	$.ajax({
 		url: "http://localhost:8888/checkFriendship",
