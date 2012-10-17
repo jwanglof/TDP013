@@ -9,9 +9,6 @@ var mongodb = require("mongodb");
 var mongo_server = new mongodb.Server("localhost", 27017);
 var mongo_db = new mongodb.Db("tdp013project1", mongo_server, {auto_reconnect: true, safe: false});
 
-// Use this DB for Mocha-tests!
-//var mongo_db = new mongodb.Db("tdp013projectMocha", mongo_server);
-
 /*
  *  The DB-connection will always be open
  */
